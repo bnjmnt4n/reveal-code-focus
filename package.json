@@ -1,6 +1,6 @@
 {
   "name": "reveal-code-focus",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "A Reveal.js plugin that allows focusing on specific lines of code blocks.",
   "license": { "name": "MIT", "url": "https://github.com/d10/reveal-code-focus/blob/gh-pages/LICENSE.txt" },
   "main": "code-focus.js",
