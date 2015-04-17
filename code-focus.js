@@ -97,17 +97,20 @@ window.RevealCodeFocus || (window.RevealCodeFocus = function (Reveal) {
 		clearPreviousHighlights();
 		var lines = fragment.getAttribute('data-code-focus');
 		if (lines) {
-			lines = lines.split('-');
 			var code = currentSlide.querySelectorAll('pre code .line');
-			if (lines.length == 1) {
-				code[lines[0] - 1].classList.add('focus');
-			} else {
-				var i = lines[0], j = lines[1];
-				i--;
-				while (++i <= j) {
-					code[i - 1].classList.add('focus');
+			lines = lines.split(',');
+			forEach(lines, function(line) {
+				lines = line.split('-');
+				if (lines.length == 1) {
+					code[lines[0] - 1].classList.add('focus');
+				} else {
+					var i = lines[0], j = lines[1];
+					i--;
+					while (++i <= j) {
+						code[i - 1].classList.add('focus');
+					}
 				}
-			}
+			})
 		}
 	}
 
