@@ -1,0 +1,12 @@
+sudo: false
+language: node_js
+node_js:
+  - 5
+git:
+  depth: 10
+after_success:
+  - $(npm bin)/update-branch --commands "mkdir ../site; cp -r . ../site; mv ../site ./site; rm ./site/.gitignore"
+                             --commit-message "Update content [ci skip]"
+                             --directory "site"
+                             --distribution-branch "gh-pages"
+                             --source-branch "master";

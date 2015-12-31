@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>reveal-code-focus demo</title>
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+    <link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css">
+    <link rel="stylesheet" href="node_modules/reveal.js/css/theme/solarized.css">
+    <link rel="stylesheet" href="vendor/highlight.js/solarized-dark.css">
+    <style>
+      .reveal .slides section .fragment.current-only {
+        opacity: 1;
+        visibility: visible;
+        display: none;
+      }
+      .reveal .slides section .fragment.current-only.current-fragment {
+        display: block;
+      }
+      .line {
+        display: block;
+      }
+      .line.focus {
+        background: yellow;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="reveal"><div class="slides">
+      <section data-markdown>
+        # reveal-code-focus
+
+        A [Reveal.js](https://github.com/hakimel/reveal.js) plugin that allows focusing
+on specific lines of code blocks.
+      </section>
+
+      <section data-markdown style="text-align: left">
+        ## Installation
+
+        Using [npm](https://www.npmjs.com/):
+
+        ```bash
+        npm install --save reveal-code-focus
+        ```
+      </section>
+
+      <section>
+        <section data-markdown><script type="text/template">
+          ## Usage
+        </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### Dependencies
+
+          ```js
+          Reveal.initialize({
+            // Include other options...
+            dependencies: [
+              // Include other dependencies...
+              { src: 'path/to/highlight.js' },
+              {
+                src: 'node_modules/reveal-code-focus/code-focus.js',
+                async: true,
+                callback: function() {
+                  RevealCodeFocus();
+                }
+              }
+            ]
+          });
+          ```
+          <span class="fragment" data-code-focus="5">Note that the `highlight.js` file mentioned is not the [Reveal.js plugin](https://github.com/hakimel/reveal.js/blob/master/plugin/highlight/highlight.js), but the actual [`highlight.js` library](https://highlightjs.org/).</span>
+        </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### Usage
+
+          ```html
+          <section>
+            <pre><code>
+            // Useless comment.
+            alert('hi');
+            </pre></code>
+            <p class="fragment" data-code-focus="1">
+              This focuses on the comment.
+            </p>
+            <p class="fragment" data-code-focus="1-2">
+              Another fragment.
+            </p>
+          </section>
+          ```
+          <span class="fragment current-only" data-code-focus="1-12">This section is a slide.</span>
+          <span class="fragment current-only" data-code-focus="2-5">This will be highlighted by `highlight.js`.</span>
+          <span class="fragment current-only" data-code-focus="6-8">This fragment focuses on the first line.</span>
+          <span class="fragment current-only" data-code-focus="9-11">This fragment focuses on lines 1 and 2.</span>
+        </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### Demo
+
+          ```js
+          // Useless comment.
+          alert('hi');
+          ```
+          <p class="fragment" data-code-focus="1">This focuses on the comment.</p>
+          <p class="fragment" data-code-focus="1-2">Another fragment.</p>
+        </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### How it works
+
+          `reveal-code-focus` associates the lines of code to focus on with fragments.
+          When the fragments are displayed, `reveal-code-focus` will focus on these lines.
+
+          Each line of code is wrapped in a `<span>` element with a class of `"line"`.
+          When lines are focused on, they will also have the `"focus"` class.
+          Use the `.line.focus` selector for custom styling.
+        </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### Styling
+
+          ```css
+          .line { display: block; }
+          .line.hover { background: yellow; }
+          /* or include a highlight.js theme and modify it */
+          /* default theme: zenburn */
+          /* ... */
+          /* on focused: switch to solarized dark */
+          .line.focus { background: #002b36; color: #839496; }
+          .line.focus .hljs-comment, .line.focus .hljs-quote { color: #586e75; }
+          /* ... */
+          ```
+        </script></section>
+      </section>
+
+      <section data-markdown><script type="text/template">
+        ## Author
+
+        [![twitter/demoneaux](http://gravatar.com/avatar/029b19dba521584d83398ada3ecf6131?s=70)](https://twitter.com/demoneaux "Follow @demoneaux on Twitter")
+
+        [Benjamin Tan](https://d10.github.io/)
+      </script></section>
+    </div></div>
+
+    <script src="node_modules/reveal.js/lib/js/head.min.js"></script>
+    <script src="node_modules/reveal.js/js/reveal.js"></script>
+    <script>
+      Reveal.initialize({
+        controls: true,
+        progress: true,
+        history: true,
+        center: true,
+        transition: 'slide',
+        dependencies: [
+          { src: 'node_modules/reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'node_modules/reveal.js/plugin/markdown/marked.js' },
+          { src: 'node_modules/reveal.js/plugin/markdown/markdown.js' },
+          { src: 'vendor/highlight.js/highlight.pack.js' },
+          { src: 'code-focus.js', callback: function() { RevealCodeFocus(); } }
+        ]
+      });
+    </script>
+  </body>
+</html>
