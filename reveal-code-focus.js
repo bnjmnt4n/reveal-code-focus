@@ -1,7 +1,7 @@
 /*!
- * reveal-code-focus
+ * reveal-code-focus 0.1.0
  * Copyright 2015 Benjamin Tan <https://demoneaux.github.io/>
- * Available under MIT license <https://github.com/demoneaux/reveal-code-focus/blob/gh-pages/LICENSE.txt>
+ * Available under MIT license <https://github.com/demoneaux/reveal-code-focus/blob/master/LICENSE>
  */
 window.RevealCodeFocus || (window.RevealCodeFocus = function (Reveal) {
   var currentSlide, currentFragments, prevSlideData = null;
@@ -11,7 +11,7 @@ window.RevealCodeFocus || (window.RevealCodeFocus = function (Reveal) {
     while (++i < length) {
       callback(array[i]);
     }
-  };
+  }
 
   function init(e) {
     var hljs_nodes = document.querySelectorAll('pre code');

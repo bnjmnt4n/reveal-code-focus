@@ -65,7 +65,7 @@ on specific lines of code blocks.
               // Include other dependencies...
               { src: 'path/to/highlight.js' },
               {
-                src: 'node_modules/reveal-code-focus/code-focus.js',
+                src: 'node_modules/reveal-code-focus/reveal-code-focus.js',
                 async: true,
                 callback: function() {
                   RevealCodeFocus();
@@ -162,7 +162,7 @@ on specific lines of code blocks.
           { src: 'node_modules/reveal.js/plugin/markdown/marked.js' },
           { src: 'node_modules/reveal.js/plugin/markdown/markdown.js' },
           { src: 'vendor/highlight.js/highlight.pack.js' },
-          { src: 'code-focus.js', callback: function() { RevealCodeFocus(); } }
+          { src: 'reveal-code-focus.js', callback: function() { RevealCodeFocus(); } }
         ]
       });
     </script>
