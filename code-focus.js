@@ -1,7 +1,7 @@
 /*!
  * reveal-code-focus
- * Copyright 2015 Benjamin Tan <https://d10.github.io/>
- * Available under MIT license <https://github.com/d10/reveal-code-focus/blob/gh-pages/LICENSE.txt>
+ * Copyright 2015 Benjamin Tan <https://demoneaux.github.io/>
+ * Available under MIT license <https://github.com/demoneaux/reveal-code-focus/blob/gh-pages/LICENSE.txt>
  */
 window.RevealCodeFocus || (window.RevealCodeFocus = function (Reveal) {
   var currentSlide, currentFragments, prevSlideData = null;
