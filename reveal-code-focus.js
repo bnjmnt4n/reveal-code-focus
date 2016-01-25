@@ -3,22 +3,27 @@
  * Copyright 2015 Benjamin Tan <https://demoneaux.github.io/>
  * Available under MIT license <https://github.com/demoneaux/reveal-code-focus/blob/master/LICENSE>
  */
-window.RevealCodeFocus || (window.RevealCodeFocus = function (Reveal) {
+window.RevealCodeFocus || (window.RevealCodeFocus = function(Reveal) {
   var currentSlide, currentFragments, prevSlideData = null;
 
-  var forEach = function(array, callback) {
+  function forEach(array, callback) {
     var i = -1, length = array ? array.length : 0;
     while (++i < length) {
       callback(array[i]);
     }
   }
 
+  function indexOf(array, elem) {
+    var i = -1, length = array ? array.length : 0;
+    while (++i < length) {
+      if (array[i] === elem) {
+        return i;
+      }
+    }
+  }
+
   function init(e) {
-    var hljs_nodes = document.querySelectorAll('pre code');
-
-    for (var i = 0, len = hljs_nodes.length; i < len; i++) {
-      var element = hljs_nodes[i];
-
+    forEach(document.querySelectorAll('pre code'), function(element) {
       // Trim whitespace if the `data-trim` attribute is present.
       if (element.hasAttribute('data-trim') && typeof element.innerHTML.trim == 'function') {
         element.innerHTML = element.innerHTML.trim();
@@ -37,8 +42,6 @@ window.RevealCodeFocus || (window.RevealCodeFocus = function (Reveal) {
         element.innerHTML
         .replace(/^(<[^>]+>)?/, function(_, html) {
           if (html && ~html.indexOf('hljs-comment')) {
-            console.log(html.indexOf('comment'))
-            console.log(html)
             return html + '<span class=line>';
           } else {
             return '<span class=line>' + (html ? html : '');
@@ -48,7 +51,7 @@ window.RevealCodeFocus || (window.RevealCodeFocus = function (Reveal) {
           return '\n&nbsp;\n';
         })
         .replace(/\n/g, '</span><span class=line>') + '</span>';
-    }
+    });
 
     Reveal.addEventListener('slidechanged', updateCurrent);
 
@@ -74,11 +77,10 @@ window.RevealCodeFocus || (window.RevealCodeFocus = function (Reveal) {
     clearPreviousHighlights();
     if (currentFragments.length) {
       if (prevSlideData && (prevSlideData.indexh > e.indexh || (prevSlideData.indexh == e.indexh && prevSlideData.indexv > e.indexv))) {
-        forEach(currentFragments, function(fragment) {
-          fragment.classList.add('visible');
-        });
-        currentFragments[currentFragments.length - 1].classList.add('current-fragment');
-        highlightFragment(currentFragments[currentFragments.length - 1]);
+        while (Reveal.nextFragment()) {}
+        var currentFragment = currentFragments[currentFragments.length - 1];
+        currentFragment.classList.add('current-fragment');
+        highlightFragment(currentFragment);
       }
     }
     prevSlideData = {
@@ -98,31 +100,28 @@ window.RevealCodeFocus || (window.RevealCodeFocus = function (Reveal) {
     var lines = fragment.getAttribute('data-code-focus');
     if (lines) {
       var code = currentSlide.querySelectorAll('pre code .line');
-      lines = lines.split(',');
-      forEach(lines, function(line) {
+      forEach(lines.split(','), function(line) {
         lines = line.split('-');
         if (lines.length == 1) {
           code[lines[0] - 1].classList.add('focus');
         } else {
-          var i = lines[0], j = lines[1];
-          i--;
+          var i = lines[0] - 1, j = lines[1];
           while (++i <= j) {
             code[i - 1].classList.add('focus');
           }
         }
-      })
+      });
     }
   }
 
   function codeFocus() {
     if (Reveal.isReady()) {
       init({ currentSlide: Reveal.getCurrentSlide() });
-      return;
+    } else {
+      Reveal.addEventListener('ready', function(e) {
+        init(e);
+      });
     }
-
-    Reveal.addEventListener('ready', function(e) {
-      init(e);
-    });
   }
 
   return codeFocus;
