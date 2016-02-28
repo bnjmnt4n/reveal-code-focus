@@ -1,0 +1,13 @@
+{
+  "name": "reveal-code-focus",
+  "main": "reveal-code-focus.js",
+  "ignore": [
+    ".*",
+    "*.html",
+    "*.log",
+    "*.md",
+    "package.json",
+    "test",
+    "vendor"
+  ]
+}
