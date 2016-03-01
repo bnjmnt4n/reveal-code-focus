@@ -133,6 +133,12 @@
           When lines are focused on, they will also have the `"focus"` class.
           Use the `.line.focus` selector for custom styling.
         </script></section>
+      </section>
+
+      <section>
+        <section data-markdown><script type="text/template">
+          ## Extras
+        </script></section>
 
         <section data-markdown><script type="text/template">
           ### Styling
@@ -140,14 +146,48 @@
           ```css
           .line { display: block; }
           .line.hover { background: yellow; }
-          /* or include a highlight.js theme and modify it */
-          /* default theme: zenburn */
+          /* include a highlight.js theme and modify it */
           /* ... */
           /* on focused: switch to solarized dark */
           .line.focus { background: #002b36; color: #839496; }
           .line.focus .hljs-comment, .line.focus .hljs-quote { color: #586e75; }
           /* ... */
           ```
+          <span class="fragment current-only" data-code-focus="1-2">To style your code you might first want to set a different background or text colour.</span>
+          <span class="fragment current-only" data-code-focus="3-4">You can also use a specific theme by default…</span>
+          <span class="fragment current-only" data-code-focus="5-8">…then switch to a different one when lines are focused on.</span>
+        </script></section>
+        
+        <section data-markdown><script type="text/template">
+          ### `data-trim`
+
+          ```html
+          <pre><code data-trim>
+
+          .line { display: block; }
+          .line.hover { background: yellow; }
+
+          </code></pre>
+          ```
+          The `data-trim` attribute can be used to indicate that code blocks should have whitespace trimmed from their front and back.
+
+          <span class="fragment" data-code-focus="1">Simply set the `data-trim` attribute on the `<code>` element</span>
+          <span class="fragment" data-code-focus="2-5">of any code blocks</span>
+          <span class="fragment" data-code-focus="3-4">to have its whitespace trimmed.</span>
+        </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### `data-noescape`
+
+          ```html
+          <pre><code data-noescape>
+          <img href="img.gif">
+          </code></pre>
+          ```
+          By default, `reveal-code-focus` automatically escapes HTML entities before highlighting code with Highlight.js.
+
+          <span class="fragment">If you don’t want that to occur,</span>
+          <span class="fragment" data-code-focus="1">you can set the `data-noescape` attribute on the `<code>` element of any code block.</span>
         </script></section>
       </section>
 
