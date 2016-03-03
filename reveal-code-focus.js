@@ -3,7 +3,11 @@
  * Copyright 2015-2016 Benjamin Tan <https://demoneaux.github.io/>
  * Available under MIT license <https://github.com/demoneaux/reveal-code-focus/blob/master/LICENSE>
  */
-window.RevealCodeFocus || (window.RevealCodeFocus = function(Reveal, hljs) {
+;(function(window, Reveal, hljs) {
+  if (typeof window.RevealCodeFocus == 'function') {
+    return;
+  }
+
   var currentSlide, currentFragments, prevSlideData = null;
 
   function forEach(array, callback) {
@@ -152,5 +156,5 @@ window.RevealCodeFocus || (window.RevealCodeFocus = function(Reveal, hljs) {
     }
   }
 
-  return RevealCodeFocus;
-}(this.Reveal, this.hljs));
+  window.RevealCodeFocus = RevealCodeFocus;
+}(this, this.Reveal, this.hljs));
