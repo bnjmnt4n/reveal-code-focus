@@ -3,7 +3,7 @@
  * Copyright 2015-2016 Benjamin Tan <https://demoneaux.github.io/>
  * Available under MIT license <https://github.com/demoneaux/reveal-code-focus/blob/master/LICENSE>
  */
-window.RevealCodeFocus || (window.RevealCodeFocus = function(Reveal) {
+window.RevealCodeFocus || (window.RevealCodeFocus = function(Reveal, hljs) {
   var currentSlide, currentFragments, prevSlideData = null;
 
   function forEach(array, callback) {
@@ -22,107 +22,135 @@ window.RevealCodeFocus || (window.RevealCodeFocus = function(Reveal) {
     }
   }
 
+  var ran;
   function init(e) {
+    // Initialize code only once.
+    // TODO: figure out why `init` is being called twice.
+    if (ran) {
+      return;
+    }
+    ran = true;
+
     forEach(document.querySelectorAll('pre code'), function(element) {
       // Trim whitespace if the `data-trim` attribute is present.
       if (element.hasAttribute('data-trim') && typeof element.innerHTML.trim == 'function') {
         element.innerHTML = element.innerHTML.trim();
       }
 
-      // Escape HTML unless prevented by author.
-      if (!element.hasAttribute('data-noescape')) {
-        element.innerHTML = element.innerHTML.replace(/</g,"&lt;").replace(/>/g,"&gt;");
-      }
-
       // Highlight code using highlight.js.
       hljs.highlightBlock(element);
 
       // Split highlighted code into lines.
-      element.innerHTML = 
-        element.innerHTML
-        .replace(/^(<[^>]+>)?/, function(_, html) {
-          if (html && ~html.indexOf('hljs-comment')) {
-            return html + '<span class=line>';
-          } else {
-            return '<span class=line>' + (html ? html : '');
+      var openTags = [], reHtmlTag = /<(\/?)span(?:\s+(?:class=(['"])hljs-.*?\2)?\s*|\s*)>/g;
+      element.innerHTML = element.innerHTML.replace(/(.*?)\r?\n/g, function(_, string) {
+        if (!string) {
+          return '<span class=line>&nbsp;</span>';
+        }
+        var openTag, stringPrepend;
+        // Re-open all tags that were previously closed.
+        if (openTags.length) {
+          stringPrepend = openTags.join('');
+        }
+        // Match all HTML `<span>` tags.
+        reHtmlTag.lastIndex = 0;
+        while (openTag = reHtmlTag.exec(string)) {
+          // If it is a closing tag, remove the opening tag from the list.
+          if (openTag[1]) {
+            openTags.pop();
           }
-        })
-        .replace(/\n\n/g, function() {
-          return '\n&nbsp;\n';
-        })
-        .replace(/\n/g, '</span><span class=line>') + '</span>';
+          // Otherwise if it is an opening tag, push it to the list.
+          else {
+            openTags.push(openTag[0]);
+          }
+        }
+        // Close all opened tags, so that strings can be wrapped with `span.line`.
+        if (openTags.length) {
+          string += Array(openTags.length + 1).join('</span>');
+        }
+        if (stringPrepend) {
+          string = stringPrepend + string;
+        }
+        return '<span class=line>' + string + '</span>';
+      });
     });
 
-    Reveal.addEventListener('slidechanged', updateCurrent);
+    Reveal.addEventListener('slidechanged', updateCurrentSlide);
 
     Reveal.addEventListener('fragmentshown', function(e) {
-      highlightFragment(e.fragment);
+      focusFragment(e.fragment);
     });
 
+    // When a fragment is hidden, clear the current focused fragment,
+    // and focus on the previous fragment.
     Reveal.addEventListener('fragmenthidden', function(e) {
-      var i = Array.prototype.indexOf.call(currentFragments, e.fragment);
-      if (i == 0) {
-        clearPreviousHighlights();
-      } else {
-        highlightFragment(currentFragments[i - 1]);
-      }
+      var index = indexOf(currentFragments, e.fragment);
+      focusFragment(currentFragments[index - 1]);
     });
 
-    updateCurrent(e);
+    updateCurrentSlide(e);
   }
 
-  function updateCurrent(e) {
+  function updateCurrentSlide(e) {
     currentSlide = e.currentSlide;
     currentFragments = currentSlide.getElementsByClassName('fragment');
-    clearPreviousHighlights();
-    if (currentFragments.length) {
-      if (prevSlideData && (prevSlideData.indexh > e.indexh || (prevSlideData.indexh == e.indexh && prevSlideData.indexv > e.indexv))) {
-        while (Reveal.nextFragment()) {}
-        var currentFragment = currentFragments[currentFragments.length - 1];
-        currentFragment.classList.add('current-fragment');
-        highlightFragment(currentFragment);
-      }
+    clearPreviousFocus();
+    if (
+        currentFragments.length &&
+        prevSlideData &&
+        (
+          prevSlideData.indexh > e.indexh ||
+          (prevSlideData.indexh == e.indexh && prevSlideData.indexv > e.indexv)
+        )
+    ) {
+      while (Reveal.nextFragment()) {}
+      var currentFragment = currentFragments[currentFragments.length - 1];
+      currentFragment.classList.add('current-fragment');
+      focusFragment(currentFragment);
     }
+    // Update previous slide information.
     prevSlideData = {
       'indexh': e.indexh,
       'indexv': e.indexv
     };
   }
 
-  function clearPreviousHighlights() {
+  // Remove
+  function clearPreviousFocus() {
     forEach(currentSlide.querySelectorAll('pre code .line.focus'), function(line) {
       line.classList.remove('focus');
     });
   }
 
-  function highlightFragment(fragment) {
-    clearPreviousHighlights();
+  function focusFragment(fragment) {
+    clearPreviousFocus();
+    if (!fragment) {
+      return;
+    }
+
     var lines = fragment.getAttribute('data-code-focus');
     if (lines) {
       var code = currentSlide.querySelectorAll('pre code .line');
       forEach(lines.split(','), function(line) {
         lines = line.split('-');
         if (lines.length == 1) {
-          code[lines[0] - 1].classList.add('focus');
+          code[lines[0] - 1] && code[lines[0] - 1].classList.add('focus');
         } else {
           var i = lines[0] - 1, j = lines[1];
           while (++i <= j) {
-            code[i - 1].classList.add('focus');
+            code[i - 1] && code[i - 1].classList.add('focus');
           }
         }
       });
     }
   }
 
-  function codeFocus() {
+  function RevealCodeFocus() {
     if (Reveal.isReady()) {
       init({ currentSlide: Reveal.getCurrentSlide() });
     } else {
-      Reveal.addEventListener('ready', function(e) {
-        init(e);
-      });
+      Reveal.addEventListener('ready', init);
     }
   }
 
-  return codeFocus;
-}(Reveal));
+  return RevealCodeFocus;
+}(this.Reveal, this.hljs));
