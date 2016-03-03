@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>reveal-code-focus tests</title>
+
+    <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+  </head>
+  <body>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+
+    <div class="reveal"><div class="slides">
+      <section>
+        <h3>Test</h3>
+
+        <pre><code class="lang-html">&lt;section&gt;
+&lt;pre&gt;&lt;code&gt;
+// Useless comment.
+alert('hi');
+&lt;/pre&gt;&lt;/code&gt;
+&lt;p class="fragment" data-code-focus="1"&gt;
+  This focuses on the comment.
+&lt;/p&gt;
+&lt;p class="fragment" data-code-focus="1-2"&gt;
+  Another fragment.
+&lt;/p&gt;
+
+&lt;!-- msjdso
+msodksodsk
+dsmlmsf --&gt;
+&lt;/section&gt;
+</pre></code>
+        <span class="fragment current-only" data-code-focus="1-12">This section is a slide.</span>
+        <span class="fragment current-only" data-code-focus="2-5">This will be highlighted by <code>highlight.js</code>.</span>
+        <span class="fragment current-only" data-code-focus="6-8">This fragment focuses on the first line.</span>
+        <span class="fragment current-only" data-code-focus="9-11">This fragment focuses on lines 1 and 2.</span>
+        <span class="fragment current-only" data-code-focus="13">Test comment 1.</span>
+        <span class="fragment current-only" data-code-focus="14">Test comment 2.</span>
+        <span class="fragment current-only" data-code-focus="15">Test comment 3.</span>
+        <span class="fragment current-only" data-code-focus="16">Test comment 4.</span>
+      </section>
+    </div></div>
+
+
+    <script src="../node_modules/reveal.js/lib/js/head.min.js"></script>
+    <script src="../node_modules/reveal.js/js/reveal.js"></script>
+    <script src="../node_modules/reveal.js/lib/js/classList.js"></script>
+    <script src="../vendor/highlight.js/highlight.pack.js"></script>
+    <script src="../reveal-code-focus.js"></script>
+    <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+    <script src="../node_modules/qunit-extras/qunit-extras.js"></script>
+    <script src="test.js"></script>
+  </body>
+</html>
