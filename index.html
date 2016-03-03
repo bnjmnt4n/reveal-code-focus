@@ -110,6 +110,7 @@
           <span class="fragment current-only" data-code-focus="2-5">This will be highlighted by `highlight.js`.</span>
           <span class="fragment current-only" data-code-focus="6-8">This fragment focuses on the first line.</span>
           <span class="fragment current-only" data-code-focus="9-11">This fragment focuses on lines 1 and 2.</span>
+          <span class="fragment current-only" data-code-focus="1-12">See the next slide for a demo with the contents of this code block.</span>
         </script></section>
 
         <section data-markdown><script type="text/template">
@@ -123,7 +124,7 @@
           <p class="fragment" data-code-focus="1-2">Another fragment.</p>
         </script></section>
 
-        <section data-markdown><script type="text/template">
+        <section data-markdown style="text-align: left"><script type="text/template">
           ### How it works
 
           `reveal-code-focus` associates the lines of code to focus on with fragments.
@@ -133,11 +134,39 @@
           When lines are focused on, they will also have the `"focus"` class.
           Use the `.line.focus` selector for custom styling.
         </script></section>
+
+        <section data-markdown>
+          ### Gotchas
+
+           * Ensure that the actual [`highlight.js` library](https://highlightjs.org/), and
+             not the [Reveal.js plugin](https://github.com/hakimel/reveal.js/blob/master/plugin/highlight/highlight.js)
+             is loaded.
+
+           * **Do not** initialize code highlighting with `hljs.initHighlightingOnLoad()`.
+        </section>
       </section>
 
       <section>
         <section data-markdown><script type="text/template">
           ## Extras
+        </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### `data-trim`
+
+          ```html
+          <pre><code data-trim>
+
+          .line { display: block; }
+          .line.hover { background: yellow; }
+
+          </code></pre>
+          ```
+          The `data-trim` attribute can be used to indicate that code blocks should have whitespace trimmed from their front and back.
+
+          <span class="fragment" data-code-focus="1">Simply set the `data-trim` attribute on the `<code>` element</span>
+          <span class="fragment" data-code-focus="2-5">of any code blocks</span>
+          <span class="fragment" data-code-focus="3-4">to have its whitespace trimmed.</span>
         </script></section>
 
         <section data-markdown><script type="text/template">
@@ -157,23 +186,25 @@
           <span class="fragment current-only" data-code-focus="3-4">You can also use a specific theme by default…</span>
           <span class="fragment current-only" data-code-focus="5-8">…then switch to a different one when lines are focused on.</span>
         </script></section>
-        
+
         <section data-markdown><script type="text/template">
-          ### `data-trim`
+          ### Custom Fragments
+
+          To display only the current visible fragments, as per these slides:
 
           ```html
-          <pre><code data-trim>
-
-          .line { display: block; }
-          .line.hover { background: yellow; }
-
-          </code></pre>
+          <style>
+            .reveal .slides section .fragment.current-only {
+              opacity: 1;
+              visibility: visible;
+              display: none;
+            }
+            .reveal .slides section .fragment.current-only.current-fragment {
+              display: block;
+            }
+          </style>
+          <span class="fragment current-only" data-code-focus="1"></span>
           ```
-          The `data-trim` attribute can be used to indicate that code blocks should have whitespace trimmed from their front and back.
-
-          <span class="fragment" data-code-focus="1">Simply set the `data-trim` attribute on the `<code>` element</span>
-          <span class="fragment" data-code-focus="2-5">of any code blocks</span>
-          <span class="fragment" data-code-focus="3-4">to have its whitespace trimmed.</span>
         </script></section>
       </section>
 
