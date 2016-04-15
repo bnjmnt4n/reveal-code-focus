@@ -8,7 +8,7 @@
     return;
   }
 
-  var currentSlide, currentFragments, prevSlideData = null;
+  var currentSlide, currentFragments, scrollToFocused, prevSlideData = null;
 
   function forEach(array, callback) {
     var i = -1, length = array ? array.length : 0;
@@ -132,23 +132,58 @@
     }
 
     var lines = fragment.getAttribute('data-code-focus');
-    if (lines) {
-      var code = currentSlide.querySelectorAll('pre code .line');
-      forEach(lines.split(','), function(line) {
-        lines = line.split('-');
-        if (lines.length == 1) {
-          code[lines[0] - 1] && code[lines[0] - 1].classList.add('focus');
-        } else {
-          var i = lines[0] - 1, j = lines[1];
-          while (++i <= j) {
-            code[i - 1] && code[i - 1].classList.add('focus');
-          }
+    if (!lines) {
+      return;
+    }
+
+    var code = currentSlide.querySelectorAll('pre code .line'),
+        codeParent, scrollLineTop, scrollLineBottom;
+
+    function focusLine(lineNumber) {
+      var line = code[lineNumber - 1];
+      if (!line) {
+        return;
+      }
+
+      line.classList.add('focus');
+
+      if (scrollLineTop == null) {
+        scrollLineTop = scrollLineBottom = lineNumber - 1;
+      } else {
+        scrollLineTop = Math.min(scrollLineTop, line.offsetTop);
+        scrollLineBottom = Math.max(scrollLineBottom, lineNumber - 1);
+      }
+    }
+
+    forEach(lines.split(','), function(line) {
+      lines = line.split('-');
+      if (lines.length == 1) {
+        focusLine(lines[0]);
+      } else {
+        var i = lines[0] - 1, j = lines[1];
+        while (++i <= j) {
+          focusLine(i);
         }
-      });
+      }
+    });
+
+    if (scrollToFocused && scrollLineTop != null) {
+      codeParent = code[scrollLineTop].parentNode;
+      scrollLineTop = code[scrollLineTop].offsetTop;
+      scrollLineBottom = code[scrollLineBottom].offsetTop + code[scrollLineBottom].clientHeight;
+      codeParent.scrollTop = scrollLineTop - (codeParent.clientHeight - (scrollLineBottom - scrollLineTop)) / 2;
     }
   }
 
-  function RevealCodeFocus() {
+  function RevealCodeFocus(options) {
+    options || (options = {
+      'scrollToFocused': true
+    });
+
+    if (options.scrollToFocused != null) {
+      scrollToFocused = options.scrollToFocused;
+    }
+
     if (Reveal.isReady()) {
       init({ currentSlide: Reveal.getCurrentSlide() });
     } else {

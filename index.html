@@ -147,8 +147,80 @@
       </section>
 
       <section>
-        <section data-markdown><script type="text/template">
+        <section data-markdown>
           ## Extras
+        </section>
+
+        <section data-markdown><script type="text/template">
+          ### Configuration
+
+          ```js
+          // Configure `reveal-code-focus`.
+          RevealCodeFocus({
+            scrollToFocused: false // default: true
+          });
+          ```
+          <p class="fragment current-only" data-code-focus="1-4">`reveal-code-focus` can be configured by passing in an `options` object.</p>
+          <p class="fragment current-only" data-code-focus="3">`scrollToFocused` automatically scrolls `<code>` elements so that the focused code is centered. This is enabled by default.</p>
+        </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### Demo of `scrollToFocused`
+
+          ```js
+          // Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi vulputate
+          // lectus vel laoreet faucibus. Etiam suscipit erat a porta consectetur.
+          // Class aptent taciti sociosqu ad litora torquent per conubia nostra, per
+          // inceptos himenaeos. Nullam aliquet luctus orci sed molestie. Vivamus a
+          // tristique eros. Aenean et quam nec elit lacinia pulvinar eget quis dui.
+          // Morbi pharetra elit vel metus lobortis bibendum. Vestibulum sit amet
+          // fringilla turpis, in condimentum arcu. In interdum porttitor elit, ac
+          // ultricies odio vestibulum ut. Nam non erat tincidunt, ultrices nulla
+          // eget, sagittis nisi. Morbi sed est commodo nulla elementum iaculis.
+          // Integer ut mi risus. Sed vitae placerat magna. Interdum et malesuada
+          // fames ac ante ipsum primis in faucibus.
+
+          // Proin laoreet est vitae mattis luctus. Nunc finibus, massa at commodo
+          // vehicula, ipsum nibh cursus augue, eu facilisis nibh metus non nibh.
+          // Sed vel aliquet eros. Praesent nibh orci, aliquet quis ligula in,
+          // vulputate mollis metus. In finibus tortor sed sapien viverra lobortis.
+          // Nunc ornare sem non elit euismod, quis lobortis purus euismod. Aliquam
+          // erat volutpat. Ut ornare semper neque, a laoreet turpis vestibulum non.
+          // Fusce in nibh vitae lorem gravida sagittis sed vitae eros. Nam sagittis
+          // dapibus mi et fermentum. Nunc arcu dui, rhoncus et venenatis ut, placerat
+          // vel quam. Integer faucibus ex metus, eleifend luctus nisl vehicula ut.
+          // Donec eu turpis a justo molestie condimentum. Curabitur fermentum eros ut
+          // metus iaculis pulvinar. Aenean finibus rutrum auctor. Cum sociis natoque
+          // penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+
+          // Vestibulum fermentum dapibus leo eget efficitur. Sed et sem rhoncus,
+          // viverra odio nec, luctus sapien. Vestibulum semper ac ante ut efficitur.
+          // Ut vitae velit ac leo elementum aliquam ut in neque. Praesent vel massa
+          // vestibulum est bibendum eleifend et nec est. Vestibulum venenatis metus
+          // sed sapien malesuada, eget tincidunt ante dapibus. Interdum et malesuada
+          // fames ac ante ipsum primis in faucibus. Morbi sed iaculis dui. Nam
+          // placerat sed nisl et condimentum. Sed et venenatis elit. Fusce sodales
+          // consectetur maximus. Vestibulum venenatis dolor sed erat hendrerit, sed
+          // ullamcorper velit porta. Donec venenatis leo nunc, eget tempor odio
+          // sodales sed. Vivamus viverra dolor vel fermentum facilisis.
+
+          // Cras sit amet eleifend nisl, non egestas magna. Etiam vehicula, purus a
+          // facilisis fermentum, urna orci fermentum enim, ac finibus nibh nibh ac
+          // nulla. Donec non orci sed diam pretium lobortis. Quisque sapien justo,
+          // vulputate nec cursus at, dignissim vitae lacus. Cras elementum molestie
+          // augue, non fringilla massa efficitur id. Donec mattis arcu felis, ut
+          // vehicula diam auctor id. Aliquam nisl ligula, feugiat at bibendum sed,
+          // viverra ac est. Proin iaculis purus eget dapibus dapibus. Aliquam tempor
+          // vehicula mi, a mattis massa porttitor id. Nam in eleifend tortor.
+          // Pellentesque mattis felis a mi molestie mattis. Aenean ligula neque,
+          // efficitur id augue id, feugiat suscipit dui. Proin vel lacus in enim
+          // facilisis venenatis nec pulvinar justo. Nulla gravida feugiat facilisis.
+          // Mauris sollicitudin leo non urna dapibus efficitur. Pellentesque habitant
+          // morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+          ```
+          <p class="fragment current-only" data-code-focus="1">Some generated text.</p>
+          <p class="fragment current-only" data-code-focus="20">Let’s scroll to line 20.</p>
+          <p class="fragment current-only" data-code-focus="1-11">Focus on this paragraph!</p>
         </script></section>
 
         <section data-markdown><script type="text/template">
