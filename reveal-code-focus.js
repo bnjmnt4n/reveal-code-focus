@@ -8,7 +8,7 @@
     return;
   }
 
-  var currentSlide, currentFragments, centerFocused = false, prevSlideData = null;
+  var currentSlide, currentFragments, scrollToFocused = true, prevSlideData = null;
 
   function forEach(array, callback) {
     var i = -1, length = array ? array.length : 0;
@@ -162,14 +162,17 @@
         }
       });
 
-      if (centerFocused && typeof(linesTop) !== 'undefined') {
+      if (scrollToFocused && typeof(linesTop) !== 'undefined') {
         codeParent.scrollTop = linesTop - (codeParent.clientHeight - (linesBottom - linesTop)) / 2;
       }
     }
   }
 
-  function RevealCodeFocus(newCenterFocused) {
-    centerFocused = newCenterFocused;
+  function RevealCodeFocus(options) {
+    options = options || {};
+    if (typeof(options.scrollToFocused) !== 'undefined') {
+      scrollToFocused = options.scrollToFocused;
+    }
     if (Reveal.isReady()) {
       init({ currentSlide: Reveal.getCurrentSlide() });
     } else {
