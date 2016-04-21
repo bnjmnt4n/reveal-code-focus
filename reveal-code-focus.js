@@ -8,7 +8,7 @@
     return;
   }
 
-  var currentSlide, currentFragments, prevSlideData = null;
+  var currentSlide, currentFragments, scrollToFocused = true, prevSlideData = null;
 
   function forEach(array, callback) {
     var i = -1, length = array ? array.length : 0;
@@ -133,22 +133,46 @@
 
     var lines = fragment.getAttribute('data-code-focus');
     if (lines) {
-      var code = currentSlide.querySelectorAll('pre code .line');
+      var code = currentSlide.querySelectorAll('pre code .line'), codeParent, linesTop, linesBottom;
+
+      function focusLine(lineNumber) {
+        if (!code[lineNumber - 1]) {
+          return;
+        }
+        code[lineNumber - 1].classList.add('focus');
+        codeParent = code[lineNumber - 1].parentNode;
+        if (typeof(linesTop) === 'undefined') {
+          linesTop = code[lineNumber - 1].offsetTop;
+          linesBottom = code[lineNumber - 1].offsetTop + code[lineNumber - 1].clientHeight;
+        } else {
+          linesTop = Math.min(linesTop, code[lineNumber - 1].offsetTop);
+          linesBottom = Math.max(linesBottom, code[lineNumber - 1].offsetTop + code[lineNumber - 1].clientHeight);
+        }
+      }
+
       forEach(lines.split(','), function(line) {
         lines = line.split('-');
         if (lines.length == 1) {
-          code[lines[0] - 1] && code[lines[0] - 1].classList.add('focus');
+          focusLine(lines[0]);
         } else {
           var i = lines[0] - 1, j = lines[1];
           while (++i <= j) {
-            code[i - 1] && code[i - 1].classList.add('focus');
+            focusLine(i);
           }
         }
       });
+
+      if (scrollToFocused && typeof(linesTop) !== 'undefined') {
+        codeParent.scrollTop = linesTop - (codeParent.clientHeight - (linesBottom - linesTop)) / 2;
+      }
     }
   }
 
-  function RevealCodeFocus() {
+  function RevealCodeFocus(options) {
+    options = options || {};
+    if (typeof(options.scrollToFocused) !== 'undefined') {
+      scrollToFocused = options.scrollToFocused;
+    }
     if (Reveal.isReady()) {
       init({ currentSlide: Reveal.getCurrentSlide() });
     } else {

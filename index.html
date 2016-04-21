@@ -144,6 +144,30 @@
 
            * **Do not** initialize code highlighting with `hljs.initHighlightingOnLoad()`.
         </section>
+
+        <section data-markdown style="text-align: left"><script type="text/template">
+          ### Configuration
+
+          `reveal-code-focus` supports one option: whether or not it automatically
+          scrolls `<code>` elements so that the focused code is centered. This
+          is enabled by default but can be disabled if desired:
+
+          ```js
+          Reveal.initialize({
+            dependencies: [
+              { src: 'path/to/highlight.js' },
+              {
+                src: 'node_modules/reveal-code-focus/reveal-code-focus.js',
+                async: true,
+                callback: function() {
+                  RevealCodeFocus({ scrollToFocused: false });
+                }
+              }
+            ]
+          });
+          ```
+        </script></section>
+
       </section>
 
       <section>
