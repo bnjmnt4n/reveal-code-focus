@@ -13,22 +13,7 @@
     <link rel="stylesheet" href="node_modules/reveal.js/css/reveal.css">
     <link rel="stylesheet" href="node_modules/reveal.js/css/theme/solarized.css">
     <link rel="stylesheet" href="vendor/highlight.js/solarized-dark.css">
-    <style>
-      .reveal .slides section .fragment.current-only {
-        opacity: 1;
-        visibility: visible;
-        display: none;
-      }
-      .reveal .slides section .fragment.current-only.current-fragment {
-        display: block;
-      }
-      .line {
-        display: block;
-      }
-      .line.focus {
-        background: yellow;
-      }
-    </style>
+    <link rel="stylesheet" href="reveal-code-focus.css">
   </head>
 
   <body>
@@ -206,6 +191,48 @@
           <span class="fragment current-only" data-code-focus="1"></span>
           ```
         </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### Blur on focus
+
+          Blur theother lines around the current highlighted code :
+
+          ```js
+          RevealCodeFocus({
+              blurOnFocus: true
+          });
+          ```
+          ```css
+          .line.blur { filter: blur(2px); -webkit-filter: blur(2px); }
+          ```
+
+          Example on next slide
+        </script></section>
+
+        <section data-markdown data-bluronfocus><script type="text/template">
+          ### Blur on focus
+
+          ```js
+          function $initHighlight(block, cls) {
+              try {
+                if (cls.search(/\bno\-highlight\b/) != -1)
+                  return process(block, true, 0x0F) +
+                         ` class="${cls}"`;
+              } catch (e) {
+                /* handle exception */
+              }
+              for (var i = 0 / 2; i < classes.length; i++) {
+                if (checkCondition(classes[i]) === undefined)
+                  console.log('undefined');
+              }
+            }
+
+            export  $initHighlight;
+          ```
+          <span class="fragment" data-code-focus="2-8">Great try catch</span>
+          
+          <span class="fragment" data-code-focus="10-13">Great for</span>
+        </script></section>
       </section>
 
       <section data-markdown><script type="text/template">
@@ -220,6 +247,7 @@
     <script src="node_modules/reveal.js/lib/js/head.min.js"></script>
     <script src="node_modules/reveal.js/js/reveal.js"></script>
     <script>
+        var RevealCodeFocusInstance;
       Reveal.initialize({
         controls: true,
         progress: true,
@@ -231,8 +259,15 @@
           { src: 'node_modules/reveal.js/plugin/markdown/marked.js' },
           { src: 'node_modules/reveal.js/plugin/markdown/markdown.js' },
           { src: 'vendor/highlight.js/highlight.pack.js' },
-          { src: 'reveal-code-focus.js', callback: function() { RevealCodeFocus(); } }
+          { src: 'reveal-code-focus.js', callback: function() { RevealCodeFocusInstance = RevealCodeFocus({ blurOnFocus: true }); } }
         ]
+      });
+      Reveal.addEventListener('slidechanged', function(event) {
+          if (event.currentSlide.hasAttribute('data-bluronfocus')) {
+              RevealCodeFocusInstance.setOptions({ blurOnFocus: true });
+          } else {
+              RevealCodeFocusInstance.setOptions({ blurOnFocus: false });
+          }
       });
     </script>
   </body>
