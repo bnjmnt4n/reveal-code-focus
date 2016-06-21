@@ -1,0 +1,18 @@
+.reveal .slides section .fragment.current-only {
+  opacity: 1;
+  visibility: visible;
+  display: none;
+}
+.reveal .slides section .fragment.current-only.current-fragment {
+  display: block;
+}
+.line {
+  display: block;
+}
+.line.focus {
+  background: yellow;
+}
+.line.blur {
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+}
