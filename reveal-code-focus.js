@@ -8,7 +8,10 @@
     return;
   }
 
-  var currentSlide, currentFragments, prevSlideData = null;
+  var currentSlide, currentFragments, prevSlideData = null,
+      options = {
+          blurOnFocus: false
+      };
 
   function forEach(array, callback) {
     var i = -1, length = array ? array.length : 0;
@@ -24,6 +27,12 @@
         return i;
       }
     }
+  }
+
+  function mergeOptions(destination, source) {
+    for (var property in source)
+        destination[property] = source[property];
+    return destination;
   }
 
   var ran;
@@ -123,6 +132,11 @@
     forEach(currentSlide.querySelectorAll('pre code .line.focus'), function(line) {
       line.classList.remove('focus');
     });
+    if (options.blurOnFocus) {
+        forEach(currentSlide.querySelectorAll('pre code .line.blur'), function(line) {
+          line.classList.remove('blur');
+        });
+    }
   }
 
   function focusFragment(fragment) {
@@ -144,16 +158,34 @@
             code[i - 1] && code[i - 1].classList.add('focus');
           }
         }
+        if (options.blurOnFocus) {
+            var i = 0,
+              len = code.length;
+            for(i; i < len; i++) {
+              if(!code[i].classList.contains('focus')) {
+                  code[i].classList.add('blur');
+              }
+            }
+        }
       });
     }
   }
 
-  function RevealCodeFocus() {
+  function RevealCodeFocus(_options) {
+
+      options = mergeOptions(options, _options);
+
     if (Reveal.isReady()) {
       init({ currentSlide: Reveal.getCurrentSlide() });
     } else {
       Reveal.addEventListener('ready', init);
     }
+      // Return a simple API for live-updating options
+      return {
+          setOptions : function(_options) {
+              options = mergeOptions(options, _options);
+          }
+      };
   }
 
   window.RevealCodeFocus = RevealCodeFocus;

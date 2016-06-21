@@ -1,6 +1,9 @@
 {
   "name": "reveal-code-focus",
-  "main": "reveal-code-focus.js",
+  "main": [
+      "reveal-code-focus.js",
+      "reveal-code-focus.css"
+  ],
   "ignore": [
     ".*",
     "*.html",

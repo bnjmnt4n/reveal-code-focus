@@ -14,6 +14,10 @@
     "name": "Benjamin Tan",
     "url": "https://demoneaux.github.io/"
   },
+  "contributors": [{
+    "name": "Vincent Ogloblinsky",
+    "email": "vincent.ogloblinsky@gmail.com"
+  }],
   "repository": {
     "type": "git",
     "url": "https://github.com/demoneaux/reveal-code-focus.git"
