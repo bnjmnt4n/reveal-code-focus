@@ -1,6 +1,6 @@
 {
   "name": "reveal-code-focus",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "description": "A Reveal.js plugin that allows focusing on specific lines of code blocks.",
   "homepage": "https://demoneaux.github.io/reveal-code-focus/",
   "main": "reveal-code-focus.js",
@@ -20,7 +20,6 @@
   },
   "bugs": "https://github.com/demoneaux/reveal-code-focus/issues",
   "files": [
-    "LICENSE",
     "reveal-code-focus.js"
   ],
   "scripts": {
