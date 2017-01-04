@@ -8,8 +8,9 @@
     return;
   }
 
-  var currentSlide, currentFragments, scrollToFocused, prevSlideData = null;
+  var currentSlide, currentFragments, scrollToFocused = true, prevSlideData = null;
 
+  // Iterates through `array`, running `callback` for each `array` element.
   function forEach(array, callback) {
     var i = -1, length = array ? array.length : 0;
     while (++i < length) {
@@ -26,14 +27,13 @@
     }
   }
 
-  var ran;
-  function init(e) {
+  function initialize(e) {
     // Initialize code only once.
-    // TODO: figure out why `init` is being called twice.
-    if (ran) {
+    // TODO: figure out why `initialize` is being called twice.
+    if (initialize.ran) {
       return;
     }
-    ran = true;
+    initialize.ran = true;
 
     forEach(document.querySelectorAll('pre code'), function(element) {
       // Trim whitespace if the `data-trim` attribute is present.
@@ -93,11 +93,14 @@
 
     updateCurrentSlide(e);
   }
+  initialize.ran = false;
 
   function updateCurrentSlide(e) {
     currentSlide = e.currentSlide;
     currentFragments = currentSlide.getElementsByClassName('fragment');
     clearPreviousFocus();
+
+    // If moving back to a previous slide…
     if (
         currentFragments.length &&
         prevSlideData &&
@@ -106,11 +109,13 @@
           (prevSlideData.indexh == e.indexh && prevSlideData.indexv > e.indexv)
         )
     ) {
+      // … return to the last fragment and highlight the code.
       while (Reveal.nextFragment()) {}
       var currentFragment = currentFragments[currentFragments.length - 1];
       currentFragment.classList.add('current-fragment');
       focusFragment(currentFragment);
     }
+
     // Update previous slide information.
     prevSlideData = {
       'indexh': e.indexh,
@@ -118,7 +123,7 @@
     };
   }
 
-  // Remove
+  // Removes any previously focused lines.
   function clearPreviousFocus() {
     forEach(currentSlide.querySelectorAll('pre code .line.focus'), function(line) {
       line.classList.remove('focus');
@@ -185,9 +190,9 @@
     }
 
     if (Reveal.isReady()) {
-      init({ currentSlide: Reveal.getCurrentSlide() });
+      initialize({ 'currentSlide': Reveal.getCurrentSlide() });
     } else {
-      Reveal.addEventListener('ready', init);
+      Reveal.addEventListener('ready', initialize);
     }
   }
 
