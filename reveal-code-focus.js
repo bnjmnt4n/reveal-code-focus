@@ -152,23 +152,7 @@
       return;
     }
 
-    var codeParent, scrollLineTop, scrollLineBottom;
-
-    function focusLine(lineNumber) {
-      var line = code[lineNumber - 1];
-      if (!line) {
-        return;
-      }
-
-      line.classList.add('focus');
-
-      if (scrollLineTop == null) {
-        scrollLineTop = scrollLineBottom = lineNumber - 1;
-      } else {
-        scrollLineTop = Math.min(scrollLineTop, line.offsetTop);
-        scrollLineBottom = Math.max(scrollLineBottom, lineNumber - 1);
-      }
-    }
+    var topLineNumber, bottomLineNumber;
 
     forEach(lines.split(','), function(line) {
       lines = line.split('-');
@@ -183,11 +167,38 @@
       }
     });
 
-    if (scrollToFocused && scrollLineTop != null) {
-      codeParent = code[scrollLineTop].parentNode;
-      scrollLineTop = code[scrollLineTop].offsetTop;
-      scrollLineBottom = code[scrollLineBottom].offsetTop + code[scrollLineBottom].clientHeight;
-      codeParent.scrollTop = scrollLineTop - (codeParent.clientHeight - (scrollLineBottom - scrollLineTop)) / 2;
+    function focusLine(lineNumber) {
+      // Convert from 1-based index to 0-based index.
+      lineNumber -= 1;
+
+      var line = code[lineNumber];
+      if (!line) {
+        return;
+      }
+
+      line.classList.add('focus');
+
+      if (scrollToFocused) {
+        if (topLineNumber == null) {
+          topLineNumber = bottomLineNumber = lineNumber;
+        } else {
+          if (lineNumber < topLineNumber) {
+            topLineNumber = lineNumber;
+          }
+          if (lineNumber > bottomLineNumber) {
+            bottomLineNumber = lineNumber;
+          }
+        }
+      }
+    }
+
+    if (scrollToFocused && topLineNumber != null) {
+      var topLine =  code[topLineNumber];
+      var bottomLine = code[bottomLineNumber];
+      var codeParent = topLine.parentNode;
+      var scrollTop = topLine.offsetTop;
+      var scrollBottom = bottomLine.offsetTop + bottomLine.clientHeight;
+      codeParent.scrollTop = scrollTop - (codeParent.clientHeight - (scrollBottom - scrollTop)) / 2;
     }
   }
 
