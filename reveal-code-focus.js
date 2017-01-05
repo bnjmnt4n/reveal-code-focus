@@ -84,6 +84,7 @@
       focusFragment(e.fragment);
     });
 
+    // TODO: make this configurable.
     // When a fragment is hidden, clear the current focused fragment,
     // and focus on the previous fragment.
     Reveal.addEventListener('fragmenthidden', function(e) {
@@ -109,7 +110,7 @@
           (prevSlideData.indexh == e.indexh && prevSlideData.indexv > e.indexv)
         )
     ) {
-      // … return to the last fragment and highlight the code.
+      // …return to the last fragment and highlight the code.
       while (Reveal.nextFragment()) {}
       var currentFragment = currentFragments[currentFragments.length - 1];
       currentFragment.classList.add('current-fragment');
@@ -141,8 +142,17 @@
       return;
     }
 
-    var code = currentSlide.querySelectorAll('pre code .line'),
-        codeParent, scrollLineTop, scrollLineBottom;
+    var codeBlock = parseInt(fragment.getAttribute('data-code-block'));
+    if (isNaN(codeBlock)) {
+      codeBlock = 1;
+    }
+
+    var code = currentSlide.querySelectorAll('pre:nth-of-type(' + codeBlock + ') code .line');
+    if (!code) {
+      return;
+    }
+
+    var codeParent, scrollLineTop, scrollLineBottom;
 
     function focusLine(lineNumber) {
       var line = code[lineNumber - 1];
@@ -166,6 +176,7 @@
         focusLine(lines[0]);
       } else {
         var i = lines[0] - 1, j = lines[1];
+
         while (++i <= j) {
           focusLine(i);
         }

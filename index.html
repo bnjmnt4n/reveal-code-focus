@@ -173,6 +173,25 @@
           <span class="fragment current-only" data-code-focus="3-4">You can also use a specific theme by default…</span>
           <span class="fragment current-only" data-code-focus="5-8">…then switch to a different one when lines are focused on.</span>
         </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### Multiple code blocks
+
+          ```js
+          // This also works with multiple code blocks
+          ```
+
+          ```html
+          <span class="fragment"
+            data-code-focus="1-5"
+            data-code-block="2">
+          </span>
+          ```
+
+          <span class="fragment current-only" data-code-focus="1">To focus on lines on slides with multiple code blocks…</span>
+          <span class="fragment current-only" data-code-focus="3" data-code-block="2">…add the `data-code-block` attribute to your fragment.</span>
+          <span class="fragment current-only" data-code-focus="1">By default, all fragments will focus on the first code block, unless otherwise specified.</span>
+        </script></section>
       </section>
 
       <section>
