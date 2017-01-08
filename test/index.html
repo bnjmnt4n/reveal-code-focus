@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>reveal-code-focus</title>
+
+    <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+  </head>
+  <body style="overflow: auto;">
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+
+    <div class="reveal" style="display: none;">
+      <div class="slides">
+        <section>
+          <pre><code>// abc
+// def
+// ghi
+</pre></code>
+          <span class="fragment" data-code-focus="1">1</span>
+          <span class="fragment" data-code-focus="1-2">1-2</span>
+        </section>
+
+        <section>
+          <h1>4</h1>
+        </section>
+      </div>
+    </div>
+
+    <script src="../node_modules/reveal.js/js/reveal.js"></script>
+    <script src="../vendor/highlight.js/highlight.pack.js"></script>
+    <script src="../reveal-code-focus.js"></script>
+    <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+    <script src="test.js"></script>
+  </body>
+</html>

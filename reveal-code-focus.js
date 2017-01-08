@@ -35,6 +35,7 @@
     }
     initialize.ran = true;
 
+    // TODO: mark as parsed.
     forEach(document.querySelectorAll('pre code'), function(element) {
       // Trim whitespace if the `data-trim` attribute is present.
       if (element.hasAttribute('data-trim') && typeof element.innerHTML.trim == 'function') {
