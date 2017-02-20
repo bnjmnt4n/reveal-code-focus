@@ -148,7 +148,12 @@
       codeBlock = 1;
     }
 
-    var code = currentSlide.querySelectorAll('pre:nth-of-type(' + codeBlock + ') code .line');
+	var pres = currentSlide.querySelectorAll('pre')[codeBlock - 1];
+	if (!pres || pres.length === 0) {
+		return;
+	}
+
+	var code = pres.querySelectorAll('code .line');
     if (!code) {
       return;
     }
