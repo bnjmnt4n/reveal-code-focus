@@ -1,5 +1,7 @@
 # reveal-code-focus
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/demoneaux/reveal-code-focus.svg)](https://greenkeeper.io/)
+
 A [Reveal.js](https://github.com/hakimel/reveal.js) plugin that allows focusing on specific lines of code blocks.
 
 ## Usage
