@@ -148,8 +148,14 @@
       codeBlock = 1;
     }
 
-    var code = currentSlide.querySelectorAll('pre:nth-of-type(' + codeBlock + ') code .line');
-    if (!code) {
+    var preElems = currentSlide.querySelectorAll('pre');
+    if (!preElems.length) {
+      return;
+    }
+
+    var pre = preElems[codeBlock - 1];
+    var code = pre.querySelectorAll('code .line');
+    if (!code.length) {
       return;
     }
 
