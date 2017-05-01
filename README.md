@@ -10,4 +10,4 @@ A [Reveal.js](https://github.com/hakimel/reveal.js) plugin that allows focusing 
 
 | [![twitter/demoneaux](http://gravatar.com/avatar/029b19dba521584d83398ada3ecf6131?s=70)](https://twitter.com/demoneaux "Follow @demoneaux on Twitter") |
 |---|
-| [Benjamin Tan](http://demoneaux.github.io/) |
+| [Benjamin Tan](https://demoneaux.github.io/) |
