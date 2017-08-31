@@ -22,7 +22,7 @@ after_success:
         $(npm bin)/update-branch --commands "mkdir ../site; \
                                              cp -r . ../site; \
                                              mv ../site ./site; \
-                                             rm ./site/.gitignore \
+                                             rm ./site/.gitignore; \
                                              touch ./site/.nojekyll" \
                                  --commit-message "Update content [ci skip]" \
                                  --directory "site" \
