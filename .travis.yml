@@ -19,11 +19,11 @@ after_success:
   - |
 
       if [[ "$(git show --no-patch --format=\"%B\" $TRAVIS_COMMIT)" =~ "[deploy site]" ]]; then
-        $(npm bin)/update-branch --commands "mkdir ../site; \
+        $(npm bin)/update-branch --commands "rm .gitignore; \
+                                             touch .nojekyll; \
+                                             mkdir ../site; \
                                              cp -r . ../site; \
-                                             mv ../site ./site; \
-                                             rm ./site/.gitignore; \
-                                             touch ./site/.nojekyll" \
+                                             mv ../site ./site;" \
                                  --commit-message "Update content [ci skip]" \
                                  --directory "site" \
                                  --distribution-branch "gh-pages" \
