@@ -1,7 +1,7 @@
 /*!
  * reveal-code-focus 1.0.0
- * Copyright 2015-2017 Benjamin Tan <https://demoneaux.github.io/>
- * Available under MIT license <https://github.com/demoneaux/reveal-code-focus/blob/master/LICENSE>
+ * Copyright 2015-2018 Benjamin Tan <https://bnjmnt4n.now.sh/>
+ * Available under MIT license <https://github.com/bnjmnt4n/reveal-code-focus/blob/master/LICENSE>
  */
 ;(function(window, Reveal, hljs) {
   if (typeof window.RevealCodeFocus == 'function') {

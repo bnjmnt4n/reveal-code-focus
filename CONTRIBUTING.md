@@ -1,6 +1,6 @@
 # Contributing to reveal-code-focus
 
-Contributions are always welcome. Before contributing, please [search the issue tracker](https://github.com/demoneaux/reveal-code-focus/issues);
+Contributions are always welcome. Before contributing, please [search the issue tracker](https://github.com/bnjmnt4n/reveal-code-focus/issues);
 your issue may have already been discussed or fixed in `master`. To contribute, [fork](https://help.github.com/articles/fork-a-repo/) reveal-code-focus, commit your changes, & [send a pull request](https://help.github.com/articles/using-pull-requests/).
 
 ## Coding Guidelines
