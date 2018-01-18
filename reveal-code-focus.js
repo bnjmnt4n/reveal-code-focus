@@ -27,13 +27,14 @@
     }
   }
 
+  var initialized = false;
   function initialize(e) {
     // Initialize code only once.
     // TODO: figure out why `initialize` is being called twice.
-    if (initialize.ran) {
+    if (initialized) {
       return;
     }
-    initialize.ran = true;
+    initialized = true;
 
     // TODO: mark as parsed.
     forEach(document.querySelectorAll('pre code'), function(element) {
@@ -46,16 +47,21 @@
       hljs.highlightBlock(element);
 
       // Split highlighted code into lines.
-      var openTags = [], reHtmlTag = /<(\/?)span(?:\s+(?:class=(['"])hljs-.*?\2)?\s*|\s*)>/g;
+      var openTags = [];
+      var reHtmlTag = /<(\/?)span(?:\s+(?:class=(['"])hljs-.*?\2)?\s*|\s*)>/g;
+
       element.innerHTML = element.innerHTML.replace(/(.*?)\r?\n/g, function(_, string) {
         if (!string) {
           return '<span class=line>&nbsp;</span>';
         }
+
         var openTag, stringPrepend;
+
         // Re-open all tags that were previously closed.
         if (openTags.length) {
           stringPrepend = openTags.join('');
         }
+
         // Match all HTML `<span>` tags.
         reHtmlTag.lastIndex = 0;
         while (openTag = reHtmlTag.exec(string)) {
@@ -68,6 +74,7 @@
             openTags.push(openTag[0]);
           }
         }
+
         // Close all opened tags, so that strings can be wrapped with `span.line`.
         if (openTags.length) {
           string += Array(openTags.length + 1).join('</span>');
@@ -75,6 +82,7 @@
         if (stringPrepend) {
           string = stringPrepend + string;
         }
+
         return '<span class=line>' + string + '</span>';
       });
     });
@@ -95,7 +103,6 @@
 
     updateCurrentSlide(e);
   }
-  initialize.ran = false;
 
   function updateCurrentSlide(e) {
     currentSlide = e.currentSlide;
@@ -104,12 +111,12 @@
 
     // If moving back to a previous slide…
     if (
-        currentFragments.length &&
-        prevSlideData &&
-        (
-          prevSlideData.indexh > e.indexh ||
-          (prevSlideData.indexh == e.indexh && prevSlideData.indexv > e.indexv)
-        )
+      currentFragments.length &&
+      prevSlideData &&
+      (
+        prevSlideData.indexh > e.indexh ||
+        (prevSlideData.indexh == e.indexh && prevSlideData.indexv > e.indexv)
+      )
     ) {
       // …return to the last fragment and highlight the code.
       while (Reveal.nextFragment()) {}
@@ -210,9 +217,9 @@
   }
 
   function RevealCodeFocus(options) {
-    options || (options = {
-      'scrollToFocused': true
-    });
+    if (!options) {
+      options = { 'scrollToFocused': true };
+    }
 
     if (options.scrollToFocused != null) {
       scrollToFocused = options.scrollToFocused;
