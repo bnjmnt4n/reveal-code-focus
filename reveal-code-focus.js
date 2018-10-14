@@ -40,7 +40,7 @@
     forEach(document.querySelectorAll('pre code'), function(element) {
       // Trim whitespace if the `data-trim` attribute is present.
       if (element.hasAttribute('data-trim') && typeof element.innerHTML.trim == 'function') {
-        element.innerHTML = element.innerHTML.trim();
+        element.innerHTML = element.innerHTML.trim() + "\n";
       }
 
       // Highlight code using highlight.js.
