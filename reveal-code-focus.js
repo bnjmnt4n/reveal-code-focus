@@ -1,5 +1,5 @@
 /*!
- * reveal-code-focus 1.0.0
+ * reveal-code-focus v1.1.0
  * Copyright 2015-2018 Benjamin Tan <https://bnjmnt4n.now.sh/>
  * Available under MIT license <https://github.com/bnjmnt4n/reveal-code-focus/blob/master/LICENSE>
  */

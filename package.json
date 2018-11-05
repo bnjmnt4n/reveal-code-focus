@@ -1,8 +1,8 @@
 {
   "name": "reveal-code-focus",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A Reveal.js plugin that allows focusing on specific lines of code blocks.",
-  "homepage": "https://demoneaux.github.io/reveal-code-focus/",
+  "homepage": "https://bnjmnt4n.github.io/reveal-code-focus/",
   "main": "reveal-code-focus.js",
   "keywords": [
     "Reveal.js",
@@ -12,18 +12,18 @@
   "license": "MIT",
   "author": {
     "name": "Benjamin Tan",
-    "url": "https://demoneaux.github.io/"
+    "url": "https://bnjmnt4n.now.sh/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/demoneaux/reveal-code-focus.git"
+    "url": "https://github.com/bnjmnt4n/reveal-code-focus.git"
   },
-  "bugs": "https://github.com/demoneaux/reveal-code-focus/issues",
+  "bugs": "https://github.com/bnjmnt4n/reveal-code-focus/issues",
   "files": [
     "reveal-code-focus.js"
   ],
   "scripts": {
-    "test": "true"
+    "test": "echo \"TODO: create an automated CI browser testing system\" && true"
   },
   "devDependencies": {
     "@alrra/travis-scripts": "^3.0.1",
