@@ -27,6 +27,27 @@
     }
     initialized = true;
 
+    parseCode();
+
+    Reveal.addEventListener('slidechanged', updateCurrentSlide);
+
+    Reveal.addEventListener('fragmentshown', function(e) {
+      focusFragments(e.fragments);
+    });
+
+    // TODO: make this configurable.
+    // When fragments are hidden, clear the current focused fragments,
+    // and focus on the previous fragments.
+    Reveal.addEventListener('fragmenthidden', function(e) {
+      var index = e.fragment.getAttribute('data-fragment-index');
+      focusFragments(currentFragmentsList[index - 1]);
+    });
+
+    updateCurrentSlide(e);
+  }
+
+  // Highlight code and transform it into individual lines.
+  function parseCode() {
     // TODO: mark as parsed.
     forEach(document.querySelectorAll('pre code'), function(element) {
       // Trim whitespace if the `data-trim` attribute is present.
@@ -35,6 +56,7 @@
       }
 
       // Highlight code using highlight.js.
+      // TODO: avoid touching the element twice (when highlighting and generating lines).
       hljs.highlightBlock(element);
 
       // Split highlighted code into lines.
@@ -84,22 +106,6 @@
         return '<span class=line>' + string + '</span>';
       });
     });
-
-    Reveal.addEventListener('slidechanged', updateCurrentSlide);
-
-    Reveal.addEventListener('fragmentshown', function(e) {
-      focusFragments(e.fragments);
-    });
-
-    // TODO: make this configurable.
-    // When fragments are hidden, clear the current focused fragments,
-    // and focus on the previous fragments.
-    Reveal.addEventListener('fragmenthidden', function(e) {
-      var index = e.fragment.getAttribute('data-fragment-index');
-      focusFragments(currentFragmentsList[index - 1]);
-    });
-
-    updateCurrentSlide(e);
   }
 
   function updateCurrentSlide(e) {
