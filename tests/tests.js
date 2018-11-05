@@ -22,7 +22,16 @@ Reveal.addEventListener('ready', function() {
 
     Reveal.nextFragment();
     assert.strictEqual(document.querySelectorAll('pre code .line.focus').length, 2, '2 lines are focused');
-    assert.deepEqual([].slice.call(document.querySelectorAll('pre code .line.focus')), [].slice.call(lines, 0, 2), '1st 2 lines are focused');
+    assert.deepEqual(
+      [].slice.call(document.querySelectorAll('pre code .line.focus'), 0, 2),
+      [].slice.call(lines, 0, 2),
+      '1st 2 lines are focused'
+    );
+
+    assert.strictEqual(lines.length, 3, 'Ensure that last line of code is wrapped in a span tag (#18)');
+    Reveal.nextFragment();
+    assert.strictEqual(document.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.deepEqual(document.querySelector('pre code .line.focus'), lines[2], 'Last line is focused');
   });
 });
 
