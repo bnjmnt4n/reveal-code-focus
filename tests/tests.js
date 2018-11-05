@@ -9,7 +9,7 @@ Reveal.addEventListener('ready', function() {
   QUnit.test('DOM', function(assert) {
     Reveal.slide(0);
     var currentSlide = Reveal.getCurrentSlide();
-    assert.strictEqual(currentSlide.id, 'slide1', 'First slide loaded');
+    assert.strictEqual(currentSlide.id, 'dom', 'Slide loaded');
 
     assert.strictEqual(currentSlide.querySelectorAll('pre code .line').length, 3, 'All lines are initialised');
     assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 0, 'No lines are focused');
@@ -38,10 +38,19 @@ Reveal.addEventListener('ready', function() {
     assert.deepEqual(currentSlide.querySelector('pre code .line.focus'), lines[2], 'Last line is focused');
   });
 
-  QUnit.test('Multiple fragments', function(assert) {
+  QUnit.test('data-trim', function(assert) {
     Reveal.slide(1);
     var currentSlide = Reveal.getCurrentSlide();
-    assert.strictEqual(currentSlide.id, 'slide2', 'Second slide loaded');
+    assert.strictEqual(currentSlide.id, 'data-trim', 'Slide loaded');
+
+    var text = '// abc// def// ghi';
+    assert.strictEqual(currentSlide.querySelector('pre code').textContent, text, 'textContent matches');
+  });
+
+  QUnit.test('Multiple fragments', function(assert) {
+    Reveal.slide(2);
+    var currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'multiple-fragments', 'Slide loaded');
 
     var lines = currentSlide.querySelectorAll('pre code .line');
 
