@@ -31,7 +31,7 @@
     forEach(document.querySelectorAll('pre code'), function(element) {
       // Trim whitespace if the `data-trim` attribute is present.
       if (element.hasAttribute('data-trim') && typeof element.innerHTML.trim == 'function') {
-        element.innerHTML = element.innerHTML.trim() + "\n";
+        element.innerHTML = element.innerHTML.trim();
       }
 
       // Highlight code using highlight.js.
@@ -41,7 +41,14 @@
       var openTags = [];
       var reHtmlTag = /<(\/?)span(?:\s+(?:class=(['"])hljs-.*?\2)?\s*|\s*)>/g;
 
-      element.innerHTML = element.innerHTML.replace(/(.*?)\r?\n/g, function(_, string) {
+      // Ensure that last line ends in a newline as our line-splitting algorithm
+      // requires lines to end in new lines.
+      var html = element.innerHTML;
+      if (html.charCodeAt(html.length - 1) != 10) {
+        html += '\n';
+      }
+
+      element.innerHTML = html.replace(/(.*?)\r?\n/g, function(_, string) {
         if (!string) {
           return '<span class=line>&nbsp;</span>';
         }

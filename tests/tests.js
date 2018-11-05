@@ -38,8 +38,20 @@ Reveal.addEventListener('ready', function() {
     assert.deepEqual(currentSlide.querySelector('pre code .line.focus'), lines[2], 'Last line is focused');
   });
 
-  QUnit.test('data-trim', function(assert) {
+  QUnit.test('ensure correct behaviour for newlines', function(assert) {
     Reveal.slide(1);
+    var currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'newlines', 'Slide loaded');
+
+    var text = '// abc// def// ghi' + String.fromCharCode(160, 160);
+    assert.strictEqual(currentSlide.querySelector('pre code').textContent, text, 'textContent matches');
+
+    var lines = currentSlide.querySelectorAll('pre code .line');
+    assert.strictEqual(lines.length, 5, 'All lines are initialised');
+  });
+
+  QUnit.test('data-trim', function(assert) {
+    Reveal.slide(2);
     var currentSlide = Reveal.getCurrentSlide();
     assert.strictEqual(currentSlide.id, 'data-trim', 'Slide loaded');
 
@@ -48,7 +60,7 @@ Reveal.addEventListener('ready', function() {
   });
 
   QUnit.test('Multiple fragments', function(assert) {
-    Reveal.slide(2);
+    Reveal.slide(3);
     var currentSlide = Reveal.getCurrentSlide();
     assert.strictEqual(currentSlide.id, 'multiple-fragments', 'Slide loaded');
 
