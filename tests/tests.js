@@ -7,31 +7,64 @@ Reveal.addEventListener('ready', function() {
   });
 
   QUnit.test('DOM', function(assert) {
-    assert.strictEqual(document.querySelectorAll('pre code .line').length, 3, 'All lines are initialised');
-    assert.strictEqual(document.querySelectorAll('pre code .line.focus').length, 0, 'No lines are focused');
+    Reveal.slide(0);
+    var currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'slide1', 'First slide loaded');
+
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line').length, 3, 'All lines are initialised');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 0, 'No lines are focused');
 
     var text = '// abc// def// ghi';
-    assert.strictEqual(document.querySelector('pre code').textContent, text, 'Text content matches');
-    assert.ok(/\bhljs\b/.test(document.querySelector('pre code').className), 'Code has been highlighted');
+    assert.strictEqual(currentSlide.querySelector('pre code').textContent, text, 'Text content matches');
+    assert.ok(/\bhljs\b/.test(currentSlide.querySelector('pre code').className), 'Code has been highlighted');
 
-    var lines = document.querySelectorAll('pre code .line');
-
-    Reveal.nextFragment();
-    assert.strictEqual(document.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
-    assert.strictEqual(document.querySelector('pre code .line.focus'), lines[0], '1st line is focused');
+    var lines = currentSlide.querySelectorAll('pre code .line');
 
     Reveal.nextFragment();
-    assert.strictEqual(document.querySelectorAll('pre code .line.focus').length, 2, '2 lines are focused');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.strictEqual(currentSlide.querySelector('pre code .line.focus'), lines[0], '1st line is focused');
+
+    Reveal.nextFragment();
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 2, '2 lines are focused');
     assert.deepEqual(
-      [].slice.call(document.querySelectorAll('pre code .line.focus'), 0, 2),
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
       [].slice.call(lines, 0, 2),
       '1st 2 lines are focused'
     );
 
     assert.strictEqual(lines.length, 3, 'Ensure that last line of code is wrapped in a span tag (#18)');
     Reveal.nextFragment();
-    assert.strictEqual(document.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
-    assert.deepEqual(document.querySelector('pre code .line.focus'), lines[2], 'Last line is focused');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.deepEqual(currentSlide.querySelector('pre code .line.focus'), lines[2], 'Last line is focused');
+  });
+
+  QUnit.test('Multiple fragments', function(assert) {
+    Reveal.slide(1);
+    var currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'slide2', 'Second slide loaded');
+
+    var lines = currentSlide.querySelectorAll('pre code .line');
+
+    assert.strictEqual(lines.length, 3, 'All lines are initialised');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 0, 'No lines are focused');
+
+    Reveal.nextFragment();
+    assert.strictEqual(currentSlide.querySelectorAll('.fragment.current-fragment').length, 2, '2 fragments are active');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 2, '2 lines are focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [lines[0], lines[2]],
+      '1st and 3rd lines are focused'
+    );
+
+    Reveal.nextFragment();
+    assert.strictEqual(currentSlide.querySelectorAll('.fragment.current-fragment').length, 1, '1 fragment is active');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 2, '2 lines are focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [].slice.call(lines, 0, 2),
+      '1st and 2nd lines are focused'
+    );
   });
 });
 
