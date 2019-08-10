@@ -8,7 +8,7 @@
     return;
   }
 
-  var currentSlide, currentFragmentsList, prevSlideData = null;
+  var currentSlide, currentFragmentsList;
 
   // Iterates through `array`, running `callback` for each `array` element.
   function forEach(array, callback) {
@@ -124,29 +124,17 @@
 
     clearPreviousFocus();
 
-    // If moving back to a previous slide…
-    if (
-      currentFragmentsList.length &&
-      prevSlideData &&
-      (
-        prevSlideData.indexh > e.indexh ||
-        (prevSlideData.indexh == e.indexh && prevSlideData.indexv > e.indexv)
-      )
-    ) {
-      // …return to the last fragment and highlight the code.
-      while (Reveal.nextFragment()) {}
-      var currentFragment = currentFragmentsList[currentFragmentsList.length - 1];
-      forEach(currentFragment, function(currentFragment) {
-        currentFragment.classList.add('current-fragment');
+    // When a slide changes, use `setTimeout` to detect the visible fragment and highlight
+    // lines only on the next event loop. This is due to the 'slidechanged' event being
+    // emitted before the 'current-fragment' class is applied to visible fragments.
+    // See: https://github.com/hakimel/reveal.js/issues/2439.
+    setTimeout(function() {
+      forEach(currentFragmentsList, function(fragments) {
+        if (fragments[0].classList.contains('current-fragment')) {
+          focusFragments(fragments);
+        }
       });
-      focusFragments(currentFragment);
-    }
-
-    // Update previous slide information.
-    prevSlideData = {
-      'indexh': e.indexh,
-      'indexv': e.indexv
-    };
+    }, 1);
   }
 
   // Obtain an object mapping the code block number to the lines to focus on within that code block.

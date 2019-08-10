@@ -120,6 +120,67 @@ Reveal.addEventListener('ready', function() {
     );
   });
 
+  QUnit.test('Slide navigation', function(assert) {
+    var done = assert.async();
+    var currentSlide, lines;
+
+    Reveal.slide(5);
+    currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'slide-navigation-1', 'Slide 1 loaded');
+
+    lines = currentSlide.querySelectorAll('pre code .line');
+
+    assert.strictEqual(lines.length, 1, 'All lines are initialised');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 0, 'No lines are focused');
+
+    Reveal.nextFragment();
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [].slice.call(lines),
+      '1st line is focused'
+    );
+
+    Reveal.slide(6);
+    currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'slide-navigation-2', 'Slide 2 loaded');
+
+    lines = currentSlide.querySelectorAll('pre code .line');
+
+    assert.strictEqual(lines.length, 1, 'All lines are initialised');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 0, 'No lines are focused');
+
+    Reveal.nextFragment();
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [].slice.call(lines),
+      '1st line is focused'
+    );
+
+    Reveal.prev();
+    assert.strictEqual(currentSlide.querySelectorAll('.fragment.current-fragment').length, 0, 'No fragments are active');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 0, 'No lines are focused');
+
+    Reveal.prev();
+    currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'slide-navigation-1', 'Slide 1 loaded');
+
+    lines = currentSlide.querySelectorAll('pre code .line');
+
+    assert.strictEqual(currentSlide.querySelectorAll('.fragment.current-fragment').length, 1, '1 fragment is active');
+    // Run asynchronously.
+    setTimeout(function() {
+      assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+      assert.deepEqual(
+        [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+        [].slice.call(lines),
+        'Focus is sustained even when slide has changed and returned to original slide'
+      );
+
+      done();
+    }, 1);
+  });
 });
 
 Reveal.initialize({
