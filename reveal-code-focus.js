@@ -8,13 +8,15 @@
     return;
   }
 
-  var currentSlide, currentFragmentsList;
+  var currentSlide;
 
   // Iterates through `array`, running `callback` for each `array` element.
   function forEach(array, callback) {
     var i = -1, length = array ? array.length : 0;
     while (++i < length) {
-      callback(array[i], i);
+      if (callback(array[i], i) === false) {
+        return;
+      };
     }
   }
 
@@ -41,8 +43,8 @@
     // When fragments are hidden, clear the current focused fragments,
     // and focus on the previous fragments.
     Reveal.addEventListener('fragmenthidden', function(e) {
-      var index = e.fragment.getAttribute('data-fragment-index');
-      focusFragments(currentFragmentsList[index - 1]);
+      var index = e.fragment.getAttribute('data-fragment-index') - 1;
+      focusFragments(currentSlide.querySelectorAll('.fragment[data-fragment-index="' + index + '"]'));
     });
 
     updateCurrentSlide(e);
@@ -112,15 +114,6 @@
 
   function updateCurrentSlide(e) {
     currentSlide = e.currentSlide;
-    currentFragmentsList = [];
-
-    forEach(currentSlide.getElementsByClassName('fragment'), function(fragment) {
-      var fragmentIndex = fragment.getAttribute('data-fragment-index');
-      (
-        currentFragmentsList[fragmentIndex] ||
-        (currentFragmentsList[fragmentIndex] = [])
-      ).push(fragment);
-    });
 
     clearPreviousFocus();
 
@@ -129,9 +122,12 @@
     // emitted before the 'current-fragment' class is applied to visible fragments.
     // See: https://github.com/hakimel/reveal.js/issues/2439.
     setTimeout(function() {
-      forEach(currentFragmentsList, function(fragments) {
-        if (fragments[0].classList.contains('current-fragment')) {
-          focusFragments(fragments);
+      forEach(currentSlide.getElementsByClassName('fragment'), function(fragment) {
+        // Highlight all fragments which have the same index as the current fragment.
+        if (fragment.classList.contains('current-fragment')) {
+          var index = fragment.getAttribute('data-fragment-index');
+          focusFragments(currentSlide.querySelectorAll('.fragment[data-fragment-index="' + index + '"]'));
+          return false;
         }
       });
     }, 1);
