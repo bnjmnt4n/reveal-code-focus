@@ -1,11 +1,6 @@
 Reveal.addEventListener('ready', function() {
   QUnit.module('reveal-code-focus');
 
-  QUnit.test('API', function(assert) {
-    assert.ok(window.RevealCodeFocus, 'RevealCodeFocus exists');
-    assert.equal(typeof window.RevealCodeFocus, 'function', 'RevealCodeFocus is a function');
-  });
-
   QUnit.test('DOM', function(assert) {
     Reveal.slide(0);
     var currentSlide = Reveal.getCurrentSlide();
@@ -90,4 +85,3 @@ Reveal.addEventListener('ready', function() {
 });
 
 Reveal.initialize();
-RevealCodeFocus();

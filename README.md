@@ -2,6 +2,8 @@
 
 A [Reveal.js](https://github.com/hakimel/reveal.js) plugin that allows focusing on specific lines of code blocks.
 
+Tested with Reveal.js v3.8.0.
+
 [View the live demo.](https://bnjmnt4n.github.io/reveal-code-focus/)
 
 ## Installation
@@ -25,10 +27,7 @@ Reveal.initialize({
     { src: 'path/to/highlight.pack.js' },
     {
       src: 'node_modules/reveal-code-focus/reveal-code-focus.js',
-      async: true,
-      callback: function() {
-        RevealCodeFocus();
-      }
+      async: true
     }
   ]
 });
@@ -84,25 +83,36 @@ You can also use a specific theme by default then switch to a different one when
 
 ## Configuration
 
-`reveal-code-focus` can be configured by passing in an `options` object.
+`reveal-code-focus` can be configured by passing in a `codeFocus` property to Reveal.js’s configuration.
 
 ```js
-// Configure `reveal-code-focus`.
-RevealCodeFocus({
-  // options
+Reveal.initialize({
+  // Configure `reveal-code-focus`.
+  codeFocus: {
+    scrollToFocused: false // default: true
+  },
+  dependencies: [
+    // Load highlight.js
+    { src: 'path/to/highlight.pack.js' },
+    {
+      src: 'node_modules/reveal-code-focus/reveal-code-focus.js',
+      async: true
+    }
+  ]
+});
+
+// Later on…
+Reveal.configure({
+  // Configure `reveal-code-focus`.
+  codeFocus: {
+    scrollToFocused: false // default: true
+  }
 });
 ```
 
 ### `scrollToFocused`
 
 `scrollToFocused` automatically scrolls the `<code>` elements such that the lines of code to be focused on is centered. This is enabled by default.
-
-
-```js
-RevealCodeFocus({
-  scrollToFocused: false // default: true
-});
-```
 
 ### Multiple code blocks
 
@@ -132,4 +142,3 @@ The `data-trim` attribute can be used to indicate that code blocks should have w
 ## Demo
 
 [View the live demo.](https://bnjmnt4n.github.io/reveal-code-focus/)
-

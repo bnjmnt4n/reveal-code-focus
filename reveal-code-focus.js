@@ -1,6 +1,6 @@
 /*!
  * reveal-code-focus v1.1.0
- * Copyright 2015-2018 Benjamin Tan <https://bnjmnt4n.now.sh/>
+ * Copyright 2015-2019 Benjamin Tan <https://bnjmnt4n.now.sh/>
  * Available under MIT license <https://github.com/bnjmnt4n/reveal-code-focus/blob/master/LICENSE>
  */
 ;(function(window, Reveal, hljs) {
@@ -8,7 +8,7 @@
     return;
   }
 
-  var currentSlide, currentFragmentsList, scrollToFocused = true, prevSlideData = null;
+  var currentSlide, currentFragmentsList, prevSlideData = null;
 
   // Iterates through `array`, running `callback` for each `array` element.
   function forEach(array, callback) {
@@ -208,7 +208,7 @@
 
         line.classList.add('focus');
 
-        if (scrollToFocused) {
+        if (Reveal.getConfig().codeFocus.scrollToFocused) {
           if (topLineNumber == null) {
             topLineNumber = bottomLineNumber = lineNumber;
           } else {
@@ -223,7 +223,7 @@
       }
 
       // TODO: avoid touching the DOM layout properties multiple times for each fragment
-      if (scrollToFocused && topLineNumber != null) {
+      if (Reveal.getConfig().codeFocus.scrollToFocused && topLineNumber != null) {
         var topLine =  code[topLineNumber];
         var bottomLine = code[bottomLineNumber];
         var codeParent = topLine.parentNode;
@@ -234,13 +234,12 @@
     });
   }
 
-  function RevealCodeFocus(options) {
-    if (!options) {
-      options = { 'scrollToFocused': true };
-    }
+  function RevealCodeFocus() {
+    var options = Reveal.getConfig().codeFocus || (Reveal.getConfig().codeFocus = {});
 
-    if (options.scrollToFocused != null) {
-      scrollToFocused = options.scrollToFocused;
+    // Default to `true`.
+    if (options.scrollToFocused == null) {
+      options.scrollToFocused = true;
     }
 
     if (Reveal.isReady()) {
@@ -250,5 +249,5 @@
     }
   }
 
-  window.RevealCodeFocus = RevealCodeFocus;
+  Reveal.registerPlugin('codeFocus', { init: RevealCodeFocus });
 }(this, this.Reveal, this.hljs));
