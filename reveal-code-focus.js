@@ -61,7 +61,7 @@
 
       // Split highlighted code into lines.
       var openTags = [];
-      var reHtmlTag = /<(\/?)span(?:\s+(?:class=(['"])hljs-.*?\2)?\s*|\s*)>/g;
+      var reHtmlTag = /<(\/?)span(?:\s+(?:class=(['"]).*?\2)?\s*|\s*)>/g;
 
       // Ensure that last line ends in a newline as our line-splitting algorithm
       // requires lines to end in new lines.
