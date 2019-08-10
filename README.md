@@ -11,7 +11,7 @@ Tested with Reveal.js v3.8.0.
 Using [npm](https://www.npmjs.com/):
 
 ```bash
-$ npm install --save reveal-code-focus
+$ npm install reveal-code-focus
 ```
 
 ## Dependencies
@@ -128,7 +128,6 @@ For slides with multiple code blocks, the `data-code-block` attribute can be use
 ### `data-trim`
 
 The `data-trim` attribute can be used to indicate that code blocks should have whitespace trimmed from their front and back.
-
 
 ```html
 <pre><code data-trim>

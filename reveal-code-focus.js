@@ -19,6 +19,8 @@
   }
 
   var initialized = false;
+  // Initialize `reveal-code-focus` by parsing code blocks and
+  // attaching fragment event listeners.
   function initialize(e) {
     // Initialize code only once.
     // TODO: figure out why `initialize` is being called twice.
@@ -154,6 +156,7 @@
     });
   }
 
+  // Focus on all lines indicated in shown fragments.
   function focusFragments(fragments) {
     clearPreviousFocus();
     if (!fragments) {

@@ -84,4 +84,8 @@ Reveal.addEventListener('ready', function() {
   });
 });
 
-Reveal.initialize();
+Reveal.initialize({
+  codeToFocus: {
+    scrollToFocused: true
+  }
+});
