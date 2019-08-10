@@ -82,6 +82,44 @@ Reveal.addEventListener('ready', function() {
       '1st and 2nd lines are focused'
     );
   });
+
+  QUnit.test('Multiple code blocks', function(assert) {
+    Reveal.slide(4);
+    var currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'multiple-code-blocks', 'Slide loaded');
+
+    var lines = currentSlide.querySelectorAll('pre code .line');
+
+    assert.strictEqual(currentSlide.querySelectorAll('pre code').length, 2, '2 code blocks exist')
+    assert.strictEqual(lines.length, 6, 'All lines are initialised');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 0, 'No lines are focused');
+
+    Reveal.nextFragment();
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [lines[3]],
+      '2#1 syntax works'
+    );
+
+    Reveal.nextFragment();
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [lines[5]],
+      '`data-code-block` syntax works'
+    );
+
+    Reveal.nextFragment();
+    assert.strictEqual(currentSlide.querySelectorAll('.fragment.current-fragment').length, 2, '2 fragments are active');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 3, '3 lines are focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [lines[0], lines[1], lines[5]],
+      'Focusing on lines from different code blocks works'
+    );
+  });
+
 });
 
 Reveal.initialize({

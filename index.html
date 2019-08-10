@@ -189,6 +189,38 @@
           <span class="fragment current-only" data-code-focus="3" data-code-block="2">…add the `data-code-block` attribute to your fragment.</span>
           <span class="fragment current-only" data-code-focus="1">By default, all fragments will focus on the first code block, unless otherwise specified.</span>
         </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### Multiple code blocks
+
+          ```js
+          // This also works with multiple code blocks
+          ```
+
+          ```html
+          <span class="fragment"
+            data-code-focus="2#1-5"
+          </span>
+          ```
+
+          <span class="fragment current-only" data-code-focus="2#2">A more succinct syntax would be using `2#1-5` to denote focusing on lines 1-5 from the 2nd code block.</span>
+        </script></section>
+
+        <section data-markdown><script type="text/template">
+          ### Multiple code blocks
+
+          ```js
+          // This also works with multiple code blocks
+          ```
+
+          ```html
+          <span class="fragment"
+            data-code-focus="1#1|2#2"
+          </span>
+          ```
+
+          <span class="fragment current-only" data-code-focus="1#1|2#2">Additionally, lines from different code blocks can be highlighted at the same time by using the `#`-syntax and separating lines from different code blocks with a `|`.</span>
+        </script></section>
       </section>
 
       <section>

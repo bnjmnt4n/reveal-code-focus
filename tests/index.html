@@ -58,6 +58,22 @@
           <span class="fragment" data-code-focus="1-2" data-fragment-index="1">1-2</span>
           <span class="fragment" data-code-focus="3" data-fragment-index="0">3</span>
         </section>
+
+        <!-- Test for highlighting lines from different code blocks at the same time -->
+        <section id="multiple-code-blocks">
+          <pre><code>// abc
+// def
+// ghi
+</code></pre>
+          <pre><code>// abc
+// def
+// ghi
+</code></pre>
+          <span class="fragment" data-code-focus="2#1" data-fragment-index="0">2#1</span>
+          <span class="fragment" data-code-focus="3" data-code-block="2" data-fragment-index="1">2#3</span>
+          <span class="fragment" data-code-focus="1-2" data-fragment-index="2">1-2</span>
+          <span class="fragment" data-code-focus="2#3" data-fragment-index="2">2#3</span>
+        </section>
       </div>
     </div>
 

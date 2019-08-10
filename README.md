@@ -125,6 +125,22 @@ For slides with multiple code blocks, the `data-code-block` attribute can be use
 </span>
 ```
 
+A more succinct alternative to the above syntax would be using `x#a-b,c,d` to denote focusing on lines `a`-`b`, `c` and `d` of the `x`-th code block.
+
+```html
+<span class="fragment"
+  data-code-focus="2#1-5">
+</span>
+```
+
+Multiple lines from different code blocks can also be focused on at the same time by using the `#`-syntax and separating lines from different code blocks with a `|`:
+
+```html
+<span class="fragment" data-code-focus="1#1-3|2#2">
+  This focuses on lines 1-3 of the first code block and line 2 of the second code block.
+</span>
+```
+
 ### `data-trim`
 
 The `data-trim` attribute can be used to indicate that code blocks should have whitespace trimmed from their front and back.

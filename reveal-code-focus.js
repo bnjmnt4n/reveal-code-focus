@@ -14,7 +14,7 @@
   function forEach(array, callback) {
     var i = -1, length = array ? array.length : 0;
     while (++i < length) {
-      callback(array[i]);
+      callback(array[i], i);
     }
   }
 
@@ -149,6 +149,60 @@
     };
   }
 
+  // Obtain an object mapping the code block number to the lines to focus on within that code block.
+  function getLinesToFocus(linesToFocusMap, lines, codeBlock) {
+    codeBlock || (codeBlock = '1');
+    var codeBlocks = codeBlock.split('|');
+
+    // Syntax for focusing on lines from multiple code blocks at the same time:
+    // `data-code-focus="1#1-3|2#2"`
+    // or
+    // `data-code-focus="1-3|2"` and `data-code-block="1|2"` for backward compatibility
+    forEach(lines.split('|'), function(lines, i) {
+      var currentCodeBlock = codeBlocks[i] || '1';
+
+      if (lines.indexOf('#') > -1) {
+        var temp = lines.split('#');
+        currentCodeBlock = temp[0];
+        lines = temp[1];
+      }
+
+      currentCodeBlock = parseInt(currentCodeBlock);
+      if (isNaN(currentCodeBlock)) {
+        return;
+      }
+
+      forEach(lines.split(','), function(line) {
+        var lines = line.split('-');
+        if (lines.length == 1) {
+          addLineToFocus(linesToFocusMap, currentCodeBlock, lines[0]);
+        } else {
+          var i = lines[0] - 1, j = lines[1];
+
+          while (++i <= j) {
+            addLineToFocus(linesToFocusMap, currentCodeBlock, i);
+          }
+        }
+      });
+    });
+  }
+
+  // Add a specific line to focus to the map.
+  function addLineToFocus(linesToFocusMap, codeBlock, line) {
+    line = parseInt(line);
+    if (isNaN(line)) {
+      return;
+    }
+
+    // Convert from 1-based index to 0-based index.
+    line -= 1;
+
+    var linesToFocus = linesToFocusMap[codeBlock] || (linesToFocusMap[codeBlock] = []);
+    if (linesToFocus.indexOf(line) == -1) {
+      linesToFocus.push(line);
+    }
+  }
+
   // Removes any previously focused lines.
   function clearPreviousFocus() {
     forEach(currentSlide.querySelectorAll('pre code .line.focus'), function(line) {
@@ -163,78 +217,65 @@
       return;
     }
 
+    var preElems = currentSlide.querySelectorAll('pre');
+    if (!preElems.length) {
+      return;
+    }
+
+    var linesToFocusMap = {};
     forEach(fragments, function(fragment) {
       var lines = fragment.getAttribute('data-code-focus');
       if (!lines) {
         return;
       }
 
-      var codeBlock = parseInt(fragment.getAttribute('data-code-block'));
-      if (isNaN(codeBlock)) {
-        codeBlock = 1;
-      }
+      var codeBlock = fragment.getAttribute('data-code-block');
 
-      var preElems = currentSlide.querySelectorAll('pre');
-      if (!preElems.length) {
-        return;
-      }
+      // For each fragment displayed, consolidate a list of lines to focus on for each code block.
+      getLinesToFocus(linesToFocusMap, lines, codeBlock)
+    });
 
-      var pre = preElems[codeBlock - 1];
-      var code = pre.querySelectorAll('code .line');
-      if (!code.length) {
-        return;
-      }
+    for (var codeBlock in linesToFocusMap) {
+      if (linesToFocusMap.hasOwnProperty(codeBlock)) {
+        var linesToFocus = linesToFocusMap[codeBlock];
 
-      forEach(lines.split(','), function(line) {
-        lines = line.split('-');
-        if (lines.length == 1) {
-          focusLine(lines[0]);
-        } else {
-          var i = lines[0] - 1, j = lines[1];
+        // Sort line numbers to ensure that first line and last line focused on
+        // are the first and last elements respectively to ensure that `scrollToFocused`
+        // functionality works.
+        linesToFocus.sort();
 
-          while (++i <= j) {
-            focusLine(i);
-          }
-        }
-      });
-
-      var topLineNumber, bottomLineNumber;
-
-      function focusLine(lineNumber) {
         // Convert from 1-based index to 0-based index.
-        lineNumber -= 1;
-
-        var line = code[lineNumber];
-        if (!line) {
+        var pre = preElems[codeBlock - 1];
+        if (!pre) {
           return;
         }
 
-        line.classList.add('focus');
+        var code = pre.querySelectorAll('code .line');
+        if (!code.length) {
+          return;
+        }
+
+        forEach(linesToFocus, function(lineNumber) {
+          var line = code[lineNumber];
+          if (!line) {
+            return;
+          }
+
+          line.classList.add('focus');
+        });
 
         if (Reveal.getConfig().codeFocus.scrollToFocused) {
-          if (topLineNumber == null) {
-            topLineNumber = bottomLineNumber = lineNumber;
-          } else {
-            if (lineNumber < topLineNumber) {
-              topLineNumber = lineNumber;
-            }
-            if (lineNumber > bottomLineNumber) {
-              bottomLineNumber = lineNumber;
-            }
-          }
+          var topLineNumber = linesToFocus[0];
+          var bottomLineNumber = linesToFocus[linesToFocus.length - 1];
+          var topLine =  code[topLineNumber];
+          var bottomLine = code[bottomLineNumber];
+          var codeParent = topLine.parentNode;
+          var scrollTop = topLine.offsetTop;
+          var scrollBottom = bottomLine.offsetTop + bottomLine.clientHeight;
+          codeParent.scrollTop = scrollTop - (codeParent.clientHeight - (scrollBottom - scrollTop)) / 2;
         }
       }
-
-      // TODO: avoid touching the DOM layout properties multiple times for each fragment
-      if (Reveal.getConfig().codeFocus.scrollToFocused && topLineNumber != null) {
-        var topLine =  code[topLineNumber];
-        var bottomLine = code[bottomLineNumber];
-        var codeParent = topLine.parentNode;
-        var scrollTop = topLine.offsetTop;
-        var scrollBottom = bottomLine.offsetTop + bottomLine.clientHeight;
-        codeParent.scrollTop = scrollTop - (codeParent.clientHeight - (scrollBottom - scrollTop)) / 2;
-      }
-    });
+    }
   }
 
   function RevealCodeFocus() {
