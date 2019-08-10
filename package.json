@@ -23,10 +23,11 @@
     "reveal-code-focus.js"
   ],
   "scripts": {
-    "test": "echo \"TODO: create an automated CI browser testing system\" && true"
+    "test": "node-qunit-phantomjs tests/index.html"
   },
   "devDependencies": {
     "@alrra/travis-scripts": "^3.0.1",
+    "node-qunit-phantomjs": "^2.0.1",
     "qunit": "^2.9.2",
     "reveal.js": "^3.8.0"
   }

@@ -123,6 +123,8 @@ Reveal.addEventListener('ready', function() {
 });
 
 Reveal.initialize({
+  // TODO: PhantomJS seems to error out when `hash` is `false`
+  hash: typeof window.callPhantom == 'function',
   codeToFocus: {
     scrollToFocused: true
   }
