@@ -20,9 +20,38 @@
     }
   }
 
+  // Iterates through `array`, running `callback` for each `array` element,
+  // and returns the maximum value returned from the callback.
+  function max(array, callback) {
+    var max = -1/0;
+
+    forEach(array, function(item) {
+      var value = parseInt(callback(item));
+      if (value > max) {
+        max = value;
+      }
+    });
+
+    return max;
+  }
+
+  // Iterates through `array`, running `callback` for each `array` element,
+  // and returns the minimum value returned from the callback.
+  function min(array, callback) {
+    var min = +1/0;
+
+    forEach(array, function(item) {
+      var value = parseInt(callback(item));
+      if (value < min) {
+        min = value;
+      }
+    });
+
+    return min;
+  }
+
   var initialized = false;
-  // Initialize `reveal-code-focus` by parsing code blocks and
-  // attaching fragment event listeners.
+  // Initialize `reveal-code-focus` by parsing code blocks and attaching event listeners.
   function initialize(e) {
     // Initialize code only once.
     // TODO: figure out why `initialize` is being called twice.
@@ -33,21 +62,13 @@
 
     parseCode();
 
-    Reveal.addEventListener('slidechanged', updateCurrentSlide);
+    // Attach event listeners.
+    Reveal.addEventListener('slidechanged', onSlideChanged);
+    Reveal.addEventListener('fragmentshown', onFragmentShown);
+    Reveal.addEventListener('fragmenthidden', onFragmentHidden);
 
-    Reveal.addEventListener('fragmentshown', function(e) {
-      focusFragments(e.fragments);
-    });
-
-    // TODO: make this configurable.
-    // When fragments are hidden, clear the current focused fragments,
-    // and focus on the previous fragments.
-    Reveal.addEventListener('fragmenthidden', function(e) {
-      var index = e.fragment.getAttribute('data-fragment-index') - 1;
-      focusFragments(currentSlide.querySelectorAll('.fragment[data-fragment-index="' + index + '"]'));
-    });
-
-    updateCurrentSlide(e);
+    // Initialize with the current slide.
+    onSlideChanged(e);
   }
 
   // Highlight code and transform it into individual lines.
@@ -112,7 +133,13 @@
     });
   }
 
-  function updateCurrentSlide(e) {
+  // Get the fragment index ofa specified fragment.
+  function getFragmentIndex(fragment) {
+    return fragment.getAttribute('data-fragment-index');
+  }
+
+  // Event handler for 'slidechanged' event.
+  function onSlideChanged(e) {
     currentSlide = e.currentSlide;
 
     clearPreviousFocus();
@@ -125,12 +152,28 @@
       forEach(currentSlide.getElementsByClassName('fragment'), function(fragment) {
         // Highlight all fragments which have the same index as the current fragment.
         if (fragment.classList.contains('current-fragment')) {
-          var index = fragment.getAttribute('data-fragment-index');
-          focusFragments(currentSlide.querySelectorAll('.fragment[data-fragment-index="' + index + '"]'));
+          focusFragments(getFragmentIndex(fragment));
           return false;
         }
       });
     }, 1);
+  }
+
+  // Event handler for 'fragmentshown' event.
+  function onFragmentShown(e) {
+    // More than 1 fragment could be shown at once, so iterate through the fragments to find the
+    // greatest fragment index.
+    var index = max(e.fragments, getFragmentIndex);
+    focusFragments(index);
+  }
+
+  // Event handler for 'fragmenthidden' event.
+  function onFragmentHidden(e) {
+    // More than 1 fragment could be hidden at once, so iterate through the fragments to find the
+    // lowest fragment index, then focus on the fragment before that.
+    // TODO: make this configurable.
+    var index = min(e.fragments, getFragmentIndex) - 1;
+    focusFragments(index);
   }
 
   // Obtain an object mapping the code block number to the lines to focus on within that code block.
@@ -244,11 +287,16 @@
     }
   }
 
-  // Focus on all lines indicated in shown fragments.
-  function focusFragments(fragments) {
+  // Focus on all lines indicated in all fragments of the given index.
+  function focusFragments(index) {
     clearPreviousFocus();
 
-    if (!fragments || !fragments.length) {
+    if (index < 0) {
+      return;
+    }
+
+    var fragments = currentSlide.querySelectorAll('.fragment[data-fragment-index="' + index + '"]');
+    if (!fragments.length) {
       return;
     }
 

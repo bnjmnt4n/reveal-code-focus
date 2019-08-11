@@ -181,6 +181,94 @@ Reveal.addEventListener('ready', function() {
       done();
     }, 1);
   });
+
+  QUnit.test('Fragment and slide navigation', function(assert) {
+    var done = assert.async();
+    var currentSlide, lines;
+
+    Reveal.slide(7);
+    currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'fragment-navigation-1', 'Slide 1 loaded');
+
+    lines = currentSlide.querySelectorAll('pre code .line');
+
+    assert.strictEqual(lines.length, 4, 'All lines are initialised');
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 0, 'No lines are focused');
+
+    Reveal.nextFragment();
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [].slice.call(lines, 0, 1),
+      '1st line is focused'
+    );
+
+    Reveal.slide(7, undefined, 3);
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [].slice.call(lines, 3),
+      '4th line is focused'
+    );
+
+    Reveal.slide(7, undefined, 1);
+    assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+    assert.deepEqual(
+      [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+      [].slice.call(lines, 1, 2),
+      '2nd line is focused'
+    );
+
+    Reveal.slide(8, undefined, 3);
+    currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'fragment-navigation-2', 'Slide 2 loaded');
+
+    lines = currentSlide.querySelectorAll('pre code .line');
+
+    assert.strictEqual(lines.length, 4, 'All lines are initialised');
+
+    // Callback hell since any slide changes runs asynchronous code.
+    setTimeout(function() {
+      assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+      assert.deepEqual(
+        [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+        [].slice.call(lines, 3),
+        '4th line is focused'
+      );
+
+      Reveal.slide(7, undefined, 2);
+      currentSlide = Reveal.getCurrentSlide();
+      assert.strictEqual(currentSlide.id, 'fragment-navigation-1', 'Slide 1 loaded');
+
+      lines = currentSlide.querySelectorAll('pre code .line');
+
+      setTimeout(function() {
+        assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+        assert.deepEqual(
+          [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+          [].slice.call(lines, 2, 3),
+          '3rd line is focused'
+        );
+
+        Reveal.slide(8, undefined, 1);
+        currentSlide = Reveal.getCurrentSlide();
+        assert.strictEqual(currentSlide.id, 'fragment-navigation-2', 'Slide 2 loaded');
+
+        setTimeout(function() {
+          lines = currentSlide.querySelectorAll('pre code .line');
+
+          assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+          assert.deepEqual(
+            [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+            [].slice.call(lines, 1, 2),
+            '2nd line is focused'
+          );
+
+          done();
+        }, 1);
+      }, 1);
+    }, 1);
+  });
 });
 
 Reveal.initialize({
