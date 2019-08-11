@@ -120,11 +120,59 @@ Reveal.addEventListener('ready', function() {
     );
   });
 
+  QUnit.test('Default `data-code-focus`', function(assert) {
+    var done = assert.async();
+
+    Reveal.slide(5);
+    var currentSlide = Reveal.getCurrentSlide();
+    assert.strictEqual(currentSlide.id, 'default-data-code-focus', 'Slide loaded');
+
+    var lines = currentSlide.querySelectorAll('pre code .line');
+
+    setTimeout(function() {
+
+      assert.strictEqual(currentSlide.querySelectorAll('pre code').length, 2, '2 code blocks exist')
+      assert.strictEqual(lines.length, 6, 'All lines are initialised');
+      assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 2, '2 lines are focused');
+      assert.deepEqual(
+        [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+        [lines[1], lines[3]],
+        '2nd and 4th lines are focused'
+        );
+
+      Reveal.nextFragment();
+      assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
+      assert.deepEqual(
+        [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+        [].slice.call(lines, 1, 2),
+        '2nd line is focused'
+      );
+
+      Reveal.nextFragment();
+      assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 2, '2 lines are focused');
+      assert.deepEqual(
+        [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+        [lines[1], lines[3]],
+        '2nd and 4th lines are focused'
+      );
+
+      Reveal.nextFragment();
+      assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 3, '3 lines are focused');
+      assert.deepEqual(
+        [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
+        [lines[1], lines[2], lines[5]],
+        '2nd, 3rd and 6th lines are focused'
+      );
+
+      done();
+    }, 1);
+  });
+
   QUnit.test('Slide navigation', function(assert) {
     var done = assert.async();
     var currentSlide, lines;
 
-    Reveal.slide(5);
+    Reveal.slide(6);
     currentSlide = Reveal.getCurrentSlide();
     assert.strictEqual(currentSlide.id, 'slide-navigation-1', 'Slide 1 loaded');
 
@@ -141,7 +189,7 @@ Reveal.addEventListener('ready', function() {
       '1st line is focused'
     );
 
-    Reveal.slide(6);
+    Reveal.slide(7);
     currentSlide = Reveal.getCurrentSlide();
     assert.strictEqual(currentSlide.id, 'slide-navigation-2', 'Slide 2 loaded');
 
@@ -186,7 +234,7 @@ Reveal.addEventListener('ready', function() {
     var done = assert.async();
     var currentSlide, lines;
 
-    Reveal.slide(7);
+    Reveal.slide(8);
     currentSlide = Reveal.getCurrentSlide();
     assert.strictEqual(currentSlide.id, 'fragment-navigation-1', 'Slide 1 loaded');
 
@@ -203,7 +251,7 @@ Reveal.addEventListener('ready', function() {
       '1st line is focused'
     );
 
-    Reveal.slide(7, undefined, 3);
+    Reveal.slide(8, undefined, 3);
     assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
     assert.deepEqual(
       [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
@@ -211,7 +259,7 @@ Reveal.addEventListener('ready', function() {
       '4th line is focused'
     );
 
-    Reveal.slide(7, undefined, 1);
+    Reveal.slide(8, undefined, 1);
     assert.strictEqual(currentSlide.querySelectorAll('pre code .line.focus').length, 1, '1 line is focused');
     assert.deepEqual(
       [].slice.call(currentSlide.querySelectorAll('pre code .line.focus')),
@@ -219,7 +267,7 @@ Reveal.addEventListener('ready', function() {
       '2nd line is focused'
     );
 
-    Reveal.slide(8, undefined, 3);
+    Reveal.slide(9, undefined, 3);
     currentSlide = Reveal.getCurrentSlide();
     assert.strictEqual(currentSlide.id, 'fragment-navigation-2', 'Slide 2 loaded');
 
@@ -236,7 +284,7 @@ Reveal.addEventListener('ready', function() {
         '4th line is focused'
       );
 
-      Reveal.slide(7, undefined, 2);
+      Reveal.slide(8, undefined, 2);
       currentSlide = Reveal.getCurrentSlide();
       assert.strictEqual(currentSlide.id, 'fragment-navigation-1', 'Slide 1 loaded');
 
@@ -250,7 +298,7 @@ Reveal.addEventListener('ready', function() {
           '3rd line is focused'
         );
 
-        Reveal.slide(8, undefined, 1);
+        Reveal.slide(9, undefined, 1);
         currentSlide = Reveal.getCurrentSlide();
         assert.strictEqual(currentSlide.id, 'fragment-navigation-2', 'Slide 2 loaded');
 

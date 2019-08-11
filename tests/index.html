@@ -75,6 +75,21 @@
           <span class="fragment" data-code-focus="2#3" data-fragment-index="2">2#3</span>
         </section>
 
+        <!-- Test for default `data-code-focus` on `pre` blocks. -->
+        <section id="default-data-code-focus">
+          <pre><code data-code-focus="2">// abc
+// def
+// ghi
+</code></pre>
+          <pre><code data-code-focus="1">// abc
+// def
+// ghi
+</code></pre>
+        <span class="fragment" data-code-focus="2"></span>
+        <span class="fragment"></span>
+        <span class="fragment" data-code-focus="1#2-3|2#3">1#2-3|2#3</span>
+      </section>
+
         <!-- Slide navigation tests -->
         <section id="slide-navigation-1">
           <pre><code>// abc</code></pre>

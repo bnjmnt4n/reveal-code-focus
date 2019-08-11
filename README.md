@@ -45,7 +45,8 @@ Each line of code is wrapped in a `<span>` element with a class of `"line"`. Whe
 
 ```html
 <section>
-  <pre><code>
+  <!-- When no fragments are active, the first line will be focused on by default-->
+  <pre><code data-code-focus="1">
   // Useless comment.
   alert('hi');
   </pre></code>

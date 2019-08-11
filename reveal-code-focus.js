@@ -149,13 +149,20 @@
     // emitted before the 'current-fragment' class is applied to visible fragments.
     // See: https://github.com/hakimel/reveal.js/issues/2439.
     setTimeout(function() {
+      var hasFragment = false;
       forEach(currentSlide.getElementsByClassName('fragment'), function(fragment) {
         // Highlight all fragments which have the same index as the current fragment.
         if (fragment.classList.contains('current-fragment')) {
+          hasFragment = true;
           focusFragments(getFragmentIndex(fragment));
           return false;
         }
       });
+
+      // If there are no fragments active, focus on the default lines on the code blocks.
+      if (!hasFragment) {
+        focusCodeBlocks();
+      }
     }, 1);
   }
 
@@ -171,7 +178,6 @@
   function onFragmentHidden(e) {
     // More than 1 fragment could be hidden at once, so iterate through the fragments to find the
     // lowest fragment index, then focus on the fragment before that.
-    // TODO: make this configurable.
     var index = min(e.fragments, getFragmentIndex) - 1;
     focusFragments(index);
   }
@@ -239,8 +245,8 @@
 
   // Focus on all lines indicated in the object map.
   function focusLines(linesToFocusMap) {
-    var preElems = currentSlide.querySelectorAll('pre');
-    if (!preElems.length) {
+    var codeBlocks = currentSlide.querySelectorAll('pre code');
+    if (!codeBlocks.length) {
       return;
     }
 
@@ -254,12 +260,12 @@
         linesToFocus.sort();
 
         // Convert from 1-based index to 0-based index.
-        var pre = preElems[codeBlock - 1];
-        if (!pre) {
+        var codeElement = codeBlocks[codeBlock - 1];
+        if (!codeElement) {
           return;
         }
 
-        var code = pre.querySelectorAll('code .line');
+        var code = codeElement.querySelectorAll('.line');
         if (!code.length) {
           return;
         }
@@ -287,16 +293,47 @@
     }
   }
 
+  // Focus on all lines indicated in the code blocks of the current slide.
+  function focusCodeBlocks() {
+    clearPreviousFocus();
+
+    var codeBlocks = currentSlide.querySelectorAll('pre code');
+    if (!codeBlocks.length) {
+      return;
+    }
+
+    var linesToFocusMap = {};
+    forEach(codeBlocks, function(element, codeBlock) {
+      var lines = element.getAttribute('data-code-focus');
+      if (!lines) {
+        // Check `<pre>` elements as well.
+        lines = element.parentNode.getAttribute('data-code-focus');
+        if (!lines) {
+          return;
+        }
+      }
+
+      // For each code block, consolidate a list of lines to focus on.
+      getLinesToFocus(linesToFocusMap, lines, String(codeBlock + 1));
+    });
+
+    focusLines(linesToFocusMap);
+  }
+
   // Focus on all lines indicated in all fragments of the given index.
+  // If there are no lines to be focused in the current fragments,
+  // default to lines specified on the code block.
   function focusFragments(index) {
     clearPreviousFocus();
 
     if (index < 0) {
+      focusCodeBlocks();
       return;
     }
 
     var fragments = currentSlide.querySelectorAll('.fragment[data-fragment-index="' + index + '"]');
     if (!fragments.length) {
+      focusCodeBlocks();
       return;
     }
 
@@ -310,8 +347,19 @@
       var codeBlock = fragment.getAttribute('data-code-block');
 
       // For each fragment displayed, consolidate a list of lines to focus on for each code block.
-      getLinesToFocus(linesToFocusMap, lines, codeBlock)
+      getLinesToFocus(linesToFocusMap, lines, codeBlock);
     });
+
+    var i = 0;
+    for (var codeBlock in linesToFocusMap) {
+      if (linesToFocusMap.hasOwnProperty(codeBlock)) {
+        i++;
+      }
+    }
+    if (i == 0) {
+      focusCodeBlocks();
+      return;
+    }
 
     focusLines(linesToFocusMap);
   }
@@ -319,7 +367,7 @@
   function RevealCodeFocus() {
     var options = Reveal.getConfig().codeFocus || (Reveal.getConfig().codeFocus = {});
 
-    // Default to `true`.
+    // `scrollToFocused` defaults to `true`.
     if (options.scrollToFocused == null) {
       options.scrollToFocused = true;
     }

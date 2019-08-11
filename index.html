@@ -101,34 +101,49 @@
 
           ```html
           <section>
-            <pre><code>
+            <pre><code data-code-focus="1">
+            <!-- Focus on the 1st line by default. -->
+            // Focused on by default.
             // Useless comment.
             alert('hi');
             </pre></code>
-            <p class="fragment" data-code-focus="1">
+            <p class="fragment" data-code-focus="2">
               This focuses on the comment.
             </p>
-            <p class="fragment" data-code-focus="1-2">
+            <p class="fragment">
+              Since there is no `data-code-focus` attribute defined
+              on this fragment, the default `data-code-focus` on the
+              `<pre>` or `<code>` will be focused on.
+            </p>
+            <p class="fragment" data-code-focus="2-3">
               Another fragment.
             </p>
           </section>
           ```
-          <span class="fragment current-only" data-code-focus="1-12">This section is a slide.</span>
-          <span class="fragment current-only" data-code-focus="2-5">This will be highlighted by `highlight.js`.</span>
-          <span class="fragment current-only" data-code-focus="6-8">This fragment focuses on the first line.</span>
-          <span class="fragment current-only" data-code-focus="9-11">This fragment focuses on lines 1 and 2.</span>
-          <span class="fragment current-only" data-code-focus="1-12">See the next slide for a demo with the contents of this code block.</span>
+          <span class="fragment current-only" data-code-focus="1-19">This section is a slide.</span>
+          <span class="fragment current-only" data-code-focus="2-7">This will be highlighted by `highlight.js`.</span>
+          <span class="fragment current-only" data-code-focus="8-10">This fragment focuses on the second line.</span>
+          <span class="fragment current-only" data-code-focus="11-15">This fragment focuses on lines 1 and 2.</span>
+          <span class="fragment current-only" data-code-focus="16-18">This fragment focuses on lines 2 and 3.</span>
+          <span class="fragment current-only" data-code-focus="1-19">See the next slide for a demo with the contents of this code block.</span>
         </script></section>
 
         <section data-markdown><script type="text/template">
           ### Demo
 
           ```js
+          // Focused on by default.
           // Useless comment.
           alert('hi');
           ```
-          <p class="fragment" data-code-focus="1">This focuses on the comment.</p>
-          <p class="fragment" data-code-focus="1-2">Another fragment.</p>
+          <!-- .element: data-code-focus="1" -->
+          <p class="fragment" data-code-focus="2">This focuses on the comment.</p>
+          <p class="fragment">
+            Since there is no <code>data-code-focus</code> attribute defined on this fragment,
+            the default <code>data-code-focus</code> on the <code>&lt;pre&gt;</code> or
+            <code>&lt;code&gt;</code> will be focused on.
+          </p>
+          <p class="fragment" data-code-focus="2-3">Another fragment.</p>
         </script></section>
 
         <section data-markdown style="text-align: left"><script type="text/template">
@@ -142,15 +157,19 @@
           Use the `.line.focus` selector for custom styling.
         </script></section>
 
-        <section data-markdown>
+        <section data-markdown><script type="text/template">
           ### Gotchas
 
-           * Ensure that the actual [`highlight.js` library](https://highlightjs.org/), and
-             not the [Reveal.js plugin](https://github.com/hakimel/reveal.js/blob/master/plugin/highlight/highlight.js)
-             is loaded.
+          * Ensure that the actual [`highlight.js` library](https://highlightjs.org/), and
+          not the [Reveal.js plugin](https://github.com/hakimel/reveal.js/blob/master/plugin/highlight/highlight.js)
+          is loaded.
 
-           * **Do not** initialize code highlighting with `hljs.initHighlightingOnLoad()`.
-        </section>
+          * **Do not** initialize code highlighting with `hljs.initHighlightingOnLoad()`.
+
+          * If using with Reveal.js’s [markdown plugin](https://github.com/hakimel/reveal.js#markdown),
+          you can use [`<!-- .element: data-code-focus="1" -->` syntax](https://github.com/hakimel/reveal.js#element-attributes)
+          as a shorthand.
+        </script></section>
 
         <section data-state="yellow-slide" data-markdown><script type="text/template">
           ### Styling
