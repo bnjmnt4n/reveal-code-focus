@@ -194,30 +194,12 @@
     });
   }
 
-  // Focus on all lines indicated in shown fragments.
-  function focusFragments(fragments) {
-    clearPreviousFocus();
-    if (!fragments) {
-      return;
-    }
-
+  // Focus on all lines indicated in the object map.
+  function focusLines(linesToFocusMap) {
     var preElems = currentSlide.querySelectorAll('pre');
     if (!preElems.length) {
       return;
     }
-
-    var linesToFocusMap = {};
-    forEach(fragments, function(fragment) {
-      var lines = fragment.getAttribute('data-code-focus');
-      if (!lines) {
-        return;
-      }
-
-      var codeBlock = fragment.getAttribute('data-code-block');
-
-      // For each fragment displayed, consolidate a list of lines to focus on for each code block.
-      getLinesToFocus(linesToFocusMap, lines, codeBlock)
-    });
 
     for (var codeBlock in linesToFocusMap) {
       if (linesToFocusMap.hasOwnProperty(codeBlock)) {
@@ -260,6 +242,30 @@
         }
       }
     }
+  }
+
+  // Focus on all lines indicated in shown fragments.
+  function focusFragments(fragments) {
+    clearPreviousFocus();
+
+    if (!fragments || !fragments.length) {
+      return;
+    }
+
+    var linesToFocusMap = {};
+    forEach(fragments, function(fragment) {
+      var lines = fragment.getAttribute('data-code-focus');
+      if (!lines) {
+        return;
+      }
+
+      var codeBlock = fragment.getAttribute('data-code-block');
+
+      // For each fragment displayed, consolidate a list of lines to focus on for each code block.
+      getLinesToFocus(linesToFocusMap, lines, codeBlock)
+    });
+
+    focusLines(linesToFocusMap);
   }
 
   function RevealCodeFocus() {
