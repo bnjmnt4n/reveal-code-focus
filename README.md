@@ -2,7 +2,7 @@
 
 A [Reveal.js](https://github.com/hakimel/reveal.js) plugin that allows focusing on specific lines of code blocks.
 
-Tested with Reveal.js v3.8.0.
+Tested with Reveal.js v3.8.0 and [highlight.js](https://highlightjs.org/) v9.15.9.
 
 [View the live demo.](https://bnjmnt4n.github.io/reveal-code-focus/)
 
@@ -16,7 +16,7 @@ $ npm install reveal-code-focus
 
 ## Dependencies
 
-`reveal-code-focus` must first be loaded along with [highlight.js](https://highlightjs.org/) (used for code highlighting).
+`reveal-code-focus` must first be loaded along with highlight.js (used for code highlighting).
 
 ```js
 Reveal.initialize({
