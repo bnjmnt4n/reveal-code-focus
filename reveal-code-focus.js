@@ -8,7 +8,7 @@
     return;
   }
 
-  var currentSlide, currentFragmentsList, scrollToFocused = true, prevSlideData = null;
+  var currentSlide, currentFragmentsList, currentFragmentIndex, scrollToFocused = true, prevSlideData = null;
 
   // Iterates through `array`, running `callback` for each `array` element.
   function forEach(array, callback) {
@@ -32,15 +32,16 @@
     Reveal.addEventListener('slidechanged', updateCurrentSlide);
 
     Reveal.addEventListener('fragmentshown', function(e) {
-      focusFragments(e.fragments);
+      currentFragmentIndex = e.fragment.getAttribute('data-fragment-index');
+      focusFragments(currentFragmentsList[currentFragmentIndex]);
     });
 
     // TODO: make this configurable.
     // When fragments are hidden, clear the current focused fragments,
     // and focus on the previous fragments.
     Reveal.addEventListener('fragmenthidden', function(e) {
-      var index = e.fragment.getAttribute('data-fragment-index');
-      focusFragments(currentFragmentsList[index - 1]);
+      currentFragmentIndex = e.fragment.getAttribute('data-fragment-index');
+      focusFragments(currentFragmentsList[currentFragmentIndex - 1]);
     });
 
     updateCurrentSlide(e);
@@ -122,23 +123,13 @@
 
     clearPreviousFocus();
 
-    // If moving back to a previous slide…
-    if (
-      currentFragmentsList.length &&
-      prevSlideData &&
-      (
-        prevSlideData.indexh > e.indexh ||
-        (prevSlideData.indexh == e.indexh && prevSlideData.indexv > e.indexv)
-      )
-    ) {
-      // …return to the last fragment and highlight the code.
-      while (Reveal.nextFragment()) {}
-      var currentFragment = currentFragmentsList[currentFragmentsList.length - 1];
-      forEach(currentFragment, function(currentFragment) {
-        currentFragment.classList.add('current-fragment');
-      });
-      focusFragments(currentFragment);
-    }
+    // Make all fragments visible which have "current-fragment" set.
+    forEach(currentFragmentsList, function(fragments) {
+      if (fragments[0].classList.contains("current-fragment"))
+      {
+        focusFragments(fragments);
+      }
+    });
 
     // Update previous slide information.
     prevSlideData = {
