@@ -28,6 +28,6 @@
   "devDependencies": {
     "@alrra/travis-scripts": "^3.0.1",
     "qunit": "^2.8.0",
-    "reveal.js": "^3.7.0"
+    "reveal.js": "^4.3.0"
   }
 }
