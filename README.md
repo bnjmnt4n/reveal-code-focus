@@ -1,5 +1,7 @@
 # reveal-code-focus
 
+**Notice: This plugin is deprecated.** [Reveal.js v4](https://github.com/hakimel/reveal.js/releases/tag/4.0.0) contains many improvements to [code blocks](https://revealjs.com/code/), which when coupled with the [Auto-Animate](https://revealjs.com/auto-animate/) feature, can replicate the functionality of this plugin.
+
 A [Reveal.js](https://github.com/hakimel/reveal.js) plugin that allows focusing on specific lines of code blocks.
 
 [View the live demo.](https://bnjmnt4n.github.io/reveal-code-focus/)
